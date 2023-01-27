@@ -96,6 +96,9 @@ function ENT:PaintZoom( X, Y, ply )
 
 	zoom = zoom + (TargetZoom - zoom) * RealFrameTime() * 10
 
+	X = X * 0.5
+	Y = Y * 0.5
+
 	surface.SetDrawColor( Color(255,255,255,255 * zoom) )
 	surface.SetMaterial(zoom_mat ) 
 	surface.DrawTexturedRectRotated( X + X * 0.5, Y * 0.5, X, Y, 0 )

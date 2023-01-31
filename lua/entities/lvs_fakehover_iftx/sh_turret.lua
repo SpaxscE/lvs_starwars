@@ -47,6 +47,10 @@ function ENT:CanUseBTL()
 	return self:GetBodygroup(1) == 0
 end
 
+function ENT:CanUseTurret()
+	return self:GetBodygroup(1) == 1
+end
+
 function ENT:TraceBTL()
 	local ID = self:LookupAttachment( "muzzle_ballturret_left" )
 	local Muzzle = self:GetAttachment( ID )
@@ -98,7 +102,13 @@ function ENT:InitTurret()
 
 		if base:GetIsCarried() then return true end
 
-		if not base:CanUseBTL() then base:FireTurret( ent ) return end
+		if not base:CanUseBTL() then
+			if not base:CanUseTurret() then return true end
+
+			base:FireTurret( ent )
+
+			return
+		end
 
 		local trace = base:TraceBTL()
 
@@ -144,6 +154,8 @@ function ENT:InitTurret()
 		if not IsValid( base ) then return end
 
 		if base:GetIsCarried() then return end
+
+		if not base:CanUseBTL() and not base:CanUseTurret() then return end
 
 		local Pos2D = base:TraceBTL().HitPos:ToScreen()
 

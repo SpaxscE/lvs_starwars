@@ -161,6 +161,7 @@ function ENT:DrawDriverBTL()
 	if not IsValid( ply ) or (ply == plyL and plyL:GetViewEntity() == plyL and not pod:GetThirdPersonMode()) then return end
 
 	if self:GetBodygroup(1) == 2 then
+		ply:SetSequence( "sit_rollercoaster" )
 		ply:SetRenderAngles( self:GetAngles() )
 		ply:DrawModel()
 

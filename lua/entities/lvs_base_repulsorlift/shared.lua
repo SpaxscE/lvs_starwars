@@ -66,10 +66,10 @@ function ENT:PlayerDirectInput( ply, cmd )
 
 	local SensX, SensY, ReturnDelta = ply:lvsMouseSensitivity()
 
-	if KeyPitchDown then MouseY = 10 * ReturnDelta end
-	if KeyPitchUp then MouseY = -10 * ReturnDelta end
-	if KeyLeft then MouseX = -10 * ReturnDelta end
-	if KeyRight then MouseX = 10 * ReturnDelta end
+	if KeyPitchDown then MouseY = (10 / SensY) * ReturnDelta end
+	if KeyPitchUp then MouseY = -(10 / SensY) * ReturnDelta end
+	if KeyLeft then MouseX = -(10 / SensX) * ReturnDelta end
+	if KeyRight then MouseX = (10 / SensX) * ReturnDelta end
 
 	local Input = Vector( MouseX * 0.4 * SensX, MouseY * SensY, 0 )
 

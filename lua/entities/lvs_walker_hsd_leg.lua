@@ -2,11 +2,11 @@ AddCSLuaFile()
 
 ENT.Type            = "anim"
 
-ENT.PrintName = "test"
-ENT.Author = "Luna"
-ENT.Category = "[LVS] - Other"
-
-ENT.Spawnable		= true
+function ENT:SetupDataTables()
+	self:NetworkVar( "Entity",0, "Base" )
+	self:NetworkVar( "Int",0, "BaseAngle" )
+	self:NetworkVar( "String",0, "LocationIndex" )
+end
 
 if SERVER then
 	function ENT:SpawnFunction( ply, tr, ClassName )
@@ -23,16 +23,14 @@ if SERVER then
 
 	function ENT:Initialize()	
 		self:SetModel( "models/blu/hsd_leg_1.mdl" )
-		self:PhysicsInit( SOLID_VPHYSICS )
-		self:SetMoveType( MOVETYPE_VPHYSICS )
-		self:SetSolid( SOLID_VPHYSICS )
+		self:SetMoveType( MOVETYPE_NONE )
+		self:SetSolid( SOLID_NONE )
 	end
 
 	function ENT:Think()
-		return true
+		return false
 	end
 else 
-
 	include( "entities/lvs_walker_atte/cl_ikfunctions.lua" )
 
 	local Length1 = 140
@@ -51,21 +49,34 @@ else
 		Leg1 = {MDL = "models/blu/hsd_leg_3.mdl", Ang = Angle(0,90,-90), Pos = Vector(0,0,0)},
 	}
 
+	local Offsets = {
+		["FL"] = -25,
+		["FR"] = 25,
+		["RL"] = 25,
+		["RR"] = -25,
+	}
+
 	function ENT:Think()
-		--self:SetAngles( Angle(0,math.cos( CurTime() * 2) * 10,0) )
+		local Base = self:GetBase()
+
+		if not IsValid( Base ) then return end
+
+		local Y = self:GetBaseAngle() + math.cos( CurTime() * 2) * 10 + (Offsets[ self:GetLocationIndex() ] or 0)
+
+		self:SetAngles( Base:LocalToWorldAngles( Angle(0,Y,0) ) )
 
 		local ID = self:LookupAttachment( "lower" )
 		local Att = self:GetAttachment( ID )
 
-		local ENDPOS = util.TraceLine( { start = Att.Pos, endpos = self:LocalToWorld( Vector(0,-270,-300) ), filter = self } ).HitPos + Vector(0,0,25)
+		if not Att then return end
+
+		local ENDPOS = util.TraceLine( { start = self:LocalToWorld( Vector(0,-270,0) ), endpos = self:LocalToWorld( Vector(0,-270,-300) ), filter = self } ).HitPos + Vector(0,0,25)
 
 		local Pos, Ang = WorldToLocal( ENDPOS, (ENDPOS - Att.Pos):Angle(), Att.Pos, self:LocalToWorldAngles( Angle(0,-90,0) ) )
 
 		local STARTPOS = Att.Pos
 
-		local JointAngle = self:LocalToWorldAngles( Angle(0,180,90) )
-
-		self:GetLegEnts( 1, Length1, Length2, JointAngle, STARTPOS, ENDPOS, LegData1 )
+		self:GetLegEnts( 1, Length1, Length2, self:LocalToWorldAngles( Angle(0,180,90) ), STARTPOS, ENDPOS, LegData1 )
 
 		if not self.IK_Joints[ 1 ] or not IsValid( self.IK_Joints[ 1 ].Attachment2 ) then return end
 
@@ -74,10 +85,14 @@ else
 		local ID1 = self:LookupAttachment( "upper" )
 		local Start = self:GetAttachment( ID1 )
 
+		if not Start then return end
+
 		local ID2 = shaft:LookupAttachment( "upper_end" )
 		local End = shaft:GetAttachment( ID2 )
 
-		self:GetLegEnts( 2, Length3, Length4, JointAngle, Start.Pos, End.Pos, LegData2 )
+		if not End then return end
+
+		self:GetLegEnts( 2, Length3, Length4, self:LocalToWorldAngles( Angle(0,0,0) ), Start.Pos, End.Pos, LegData2 )
 
 		if not self.IK_Joints[ 2 ] or not IsValid( self.IK_Joints[ 2 ].Attachment1 ) then return end
 

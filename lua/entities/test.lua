@@ -35,22 +35,37 @@ else
 
 	include( "entities/lvs_walker_atte/cl_ikfunctions.lua" )
 
+	local Length1 = 140
+	local Length2 = 300
+
+	local LegData = {
+		Leg1 = {MDL = "models/blu/hsd_leg_2.mdl", Ang = Angle(0,-90,-90), Pos = Vector(0,0,0)},
+		Leg2 = {MDL = "models/blu/hsd_leg_4.mdl", Ang = Angle(180,90,4), Pos = Vector(20,0,-12)},
+		Foot = {MDL = "models/blu/hsd_foot.mdl", Ang = Angle(0,0,0), Pos = Vector(0,-2,0)}
+	}
+
 	function ENT:Think()
 
 		local ID = self:LookupAttachment( "leg_front_right" )
 		local Att = self:GetAttachment( ID )
 
-		local L1 = 200
-		local L2 = 300
-		local JOINTANG = self:LocalToWorldAngles( Angle(0,180,90) )
 		local STARTPOS = Att.Pos
-		local ENDPOS =  self:LocalToWorld( Vector(25,-350,0) )
-		local ATTACHMENTS = {
-			Leg1 = {MDL = "models/error.mdl", Ang = Angle(0,0,0), Pos = Vector(0,0,0)},
-			Leg2 = {MDL = "models/blu/hsd_leg_4.mdl", Ang = Angle(180,90,4), Pos = Vector(20,0,-12)},
-			Foot = {MDL = "models/blu/hsd_foot.mdl", Ang = Angle(0,0,0), Pos = Vector(0,-2,0)}
-		}
-		self:GetLegEnts( 1, L1, L2, JOINTANG, STARTPOS, ENDPOS, ATTACHMENTS )
+		local ENDPOS = util.TraceLine( { start = STARTPOS, endpos = self:LocalToWorld( Vector(80,-270,-100) ), filter = self } ).HitPos + Vector(0,0,25)
+
+		local Pos, Ang = WorldToLocal( ENDPOS, (ENDPOS - Att.Pos):Angle(), Att.Pos, self:LocalToWorldAngles( Angle(0,-90,0) ) )
+
+		local JointAngle = self:LocalToWorldAngles( Angle(0,180 + Ang.y,90) )
+
+		self:GetLegEnts( 1, Length1, Length2, JointAngle, STARTPOS, ENDPOS, LegData )
+
+		if self.IK_Joints[ 1 ] then
+			if IsValid( self.IK_Joints[ 1 ].LegBaseRot ) then
+				self.IK_Joints[ 1 ].LegBaseRot:SetAngles( JointAngle )
+			end
+			if IsValid( self.IK_Joints[ 1 ].Attachment3 ) then
+				self.IK_Joints[ 1 ].Attachment3:SetAngles( self:LocalToWorldAngles( Angle(0,Ang.y,0) ) )
+			end
+		end
 	end
 
 	function ENT:OnRemove()

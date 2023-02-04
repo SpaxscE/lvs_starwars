@@ -23,57 +23,37 @@ if SERVER then
 
 	function ENT:Initialize()	
 		self:SetModel( "models/blu/hsd.mdl" )
-
 		self:PhysicsInit( SOLID_VPHYSICS )
 		self:SetMoveType( MOVETYPE_VPHYSICS )
 		self:SetSolid( SOLID_VPHYSICS )
-
-		local ID = self:LookupAttachment( "leg_front_right" ) 
-		local att = self:GetAttachment( ID )
-
-		local leg = ents.Create( "prop_dynamic" )
-		leg:SetModel("models/blu/hsd_leg.mdl")
-		leg:SetPos( att.Pos )
-		leg:SetAngles( self:LocalToWorldAngles( Angle(0,0,0) ) )
-		leg:Spawn()
-		leg:Activate()
-		leg:SetParent( self, ID )
-
-		self.leg = leg
-	end
-
-	function ENT:Test()
-	
-		local up = self:GetUp()
-		local ID = self.leg:LookupAttachment( "trace_start" ) 
-		local att = self.leg:GetAttachment( ID )
-
-		local trace = util.TraceLine( {
-			start = att.Pos,
-			endpos = att.Pos - up * 1000,
-			filter = self,
-		} )
-
-		local Z = self.leg:WorldToLocal( trace.HitPos + up * 216 ).z
-
-		self.leg:SetPoseParameter( "leg_z", Z  )
-
-		debugoverlay.Cross( att.Pos, 50, 0.1, Color( 0, 255, 255 ) )
 	end
 
 	function ENT:Think()
-		self:NextThink( CurTime() )
-
-		if IsValid( self.leg ) then
-			self:Test()
-		end
-
 		return true
 	end
-end
+else 
 
-if CLIENT then
-	function ENT:Draw()
-		self:DrawModel()
+	include( "entities/lvs_walker_atte/cl_ikfunctions.lua" )
+
+	function ENT:Think()
+
+		local ID = self:LookupAttachment( "leg_front_right" )
+		local Att = self:GetAttachment( ID )
+
+		local L1 = 200
+		local L2 = 300
+		local JOINTANG = self:LocalToWorldAngles( Angle(0,180,90) )
+		local STARTPOS = Att.Pos
+		local ENDPOS =  self:LocalToWorld( Vector(25,-350,0) )
+		local ATTACHMENTS = {
+			Leg1 = {MDL = "models/error.mdl", Ang = Angle(0,0,0), Pos = Vector(0,0,0)},
+			Leg2 = {MDL = "models/blu/hsd_leg_4.mdl", Ang = Angle(180,90,4), Pos = Vector(20,0,-12)},
+			Foot = {MDL = "models/blu/hsd_foot.mdl", Ang = Angle(0,0,0), Pos = Vector(0,-2,0)}
+		}
+		self:GetLegEnts( 1, L1, L2, JOINTANG, STARTPOS, ENDPOS, ATTACHMENTS )
+	end
+
+	function ENT:OnRemove()
+		self:OnRemoved()
 	end
 end

@@ -76,7 +76,7 @@ else
 
 		local STARTPOS = Att.Pos
 
-		self:GetLegEnts( 1, Length1, Length2, self:LocalToWorldAngles( Angle(0,180,90) ), STARTPOS, ENDPOS, LegData1 )
+		self:GetLegEnts( 1, Length1, Length2, self:LocalToWorldAngles( Angle(0,180,135) ), STARTPOS, ENDPOS, LegData1 )
 
 		if not self.IK_Joints[ 1 ] or not IsValid( self.IK_Joints[ 1 ].Attachment2 ) then return end
 
@@ -92,7 +92,7 @@ else
 
 		if not End then return end
 
-		self:GetLegEnts( 2, Length3, Length4, self:LocalToWorldAngles( Angle(0,0,0) ), Start.Pos, End.Pos, LegData2 )
+		self:GetLegEnts( 2, Length3, Length4, self:LocalToWorldAngles( Angle(0,0,-45) ), Start.Pos, End.Pos, LegData2 )
 
 		if not self.IK_Joints[ 2 ] or not IsValid( self.IK_Joints[ 2 ].Attachment1 ) then return end
 

@@ -50,10 +50,10 @@ else
 	}
 
 	local Offsets = {
-		["FL"] = -25,
-		["FR"] = 25,
-		["RL"] = 25,
-		["RR"] = -25,
+		["FL"] = -35,
+		["FR"] = 35,
+		["RL"] = 35,
+		["RR"] = -35,
 	}
 
 	function ENT:Think()
@@ -61,7 +61,7 @@ else
 
 		if not IsValid( Base ) then return end
 
-		local Y = self:GetBaseAngle() + math.cos( CurTime() * 2) * 10 + (Offsets[ self:GetLocationIndex() ] or 0)
+		local Y = self:GetBaseAngle() + (Offsets[ self:GetLocationIndex() ] or 0)
 
 		self:SetAngles( Base:LocalToWorldAngles( Angle(0,Y,0) ) )
 

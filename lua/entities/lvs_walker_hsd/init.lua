@@ -5,7 +5,7 @@ include("shared.lua")
 function ENT:OnSpawn( PObj )
 	PObj:SetMass( 5000 )
 
-	local DriverSeat = self:AddDriverSeat( Vector(0,0,160), Angle(0,-90,0) )
+	local DriverSeat = self:AddDriverSeat( Vector(0,0,190), Angle(0,-90,0) )
 	DriverSeat:SetCameraDistance( 0.75 )
 
 	local Legs = {

@@ -54,15 +54,80 @@ function ENT:OnSpawn( PObj )
 		Leg:SetLocationIndex( data.id )
 	end
 
-	self:AddDS( {
-		pos = Vector(0,0,200),
+	-- armor points
+	self:AddDSArmor( {
+		pos = Vector(0,0,215),
 		ang = Angle(0,0,0),
-		mins = Vector(-100,-100,-100),
-		maxs =  Vector(100,100,100),
+		mins = Vector(-75,-75,-85),
+		maxs =  Vector(75,75,60),
+		Callback = function( tbl, ent, dmginfo )
+			if ent:GetHP() > 500 or self:GetIsRagdoll() then return end
+
+			ent:BecomeRagdoll()
+		end
+	} )
+
+	self:AddDSArmor( {
+		pos = Vector(0,0,290),
+		ang = Angle(0,0,0),
+		mins = Vector(-30,-50,-20),
+		maxs =  Vector(30,50,20),
+		Callback = function( tbl, ent, dmginfo )
+		end
+	} )
+
+	-- weak points
+	self:AddDS( {
+		pos = Vector(50,0,290),
+		ang = Angle(0,0,0),
+		mins = Vector(-15,-15,-15),
+		maxs =  Vector(15,15,15),
 		Callback = function( tbl, ent, dmginfo )
 			if dmginfo:GetDamage() <= 0 then return end
 
+			dmginfo:ScaleDamage( 2 )
+
 			if ent:GetHP() > 1000 or self:GetIsRagdoll() then return end
+
+			ent:BecomeRagdoll()
+
+			local effectdata = EffectData()
+				effectdata:SetOrigin( self:LocalToWorld( Vector(0,0,80) ) )
+			util.Effect( "lvs_explosion_nodebris", effectdata )
+		end
+	} )
+
+	self:AddDS( {
+		pos = Vector(0,115,220),
+		ang = Angle(0,0,0),
+		mins = Vector(-35,-35,-35),
+		maxs =  Vector(35,35,35),
+		Callback = function( tbl, ent, dmginfo )
+			if dmginfo:GetDamage() <= 0 then return end
+
+			dmginfo:ScaleDamage( 1.5 )
+
+			if ent:GetHP() > 2500 or self:GetIsRagdoll() then return end
+
+			ent:BecomeRagdoll()
+
+			local effectdata = EffectData()
+				effectdata:SetOrigin( self:LocalToWorld( Vector(0,0,80) ) )
+			util.Effect( "lvs_explosion_nodebris", effectdata )
+		end
+	} )
+
+	self:AddDS( {
+		pos = Vector(0,-115,220),
+		ang = Angle(0,0,0),
+		mins = Vector(-35,-35,-35),
+		maxs =  Vector(35,35,35),
+		Callback = function( tbl, ent, dmginfo )
+			if dmginfo:GetDamage() <= 0 then return end
+
+			dmginfo:ScaleDamage( 1.5 )
+
+			if ent:GetHP() > 2500 or self:GetIsRagdoll() then return end
 
 			ent:BecomeRagdoll()
 

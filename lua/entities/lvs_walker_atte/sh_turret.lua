@@ -47,7 +47,7 @@ end
 function ENT:InitTurret()
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/protontorpedo.png")
-	weapon.Ammo = 40
+	weapon.Ammo = 160
 	weapon.Delay = 0.5
 	weapon.HeatRateUp = 0.6
 	weapon.HeatRateDown = 0.25
@@ -78,6 +78,8 @@ function ENT:InitTurret()
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
 		projectile:SetSpeed( 4000 )
 		projectile:Enable()
+
+		ent:TakeAmmo()
 
 		if not IsValid( base.SNDTurret ) then return end
 

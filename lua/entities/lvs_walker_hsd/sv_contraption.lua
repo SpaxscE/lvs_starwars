@@ -42,7 +42,7 @@ end
 function ENT:CheckUpRight()
 	if self:IsPlayerHolding() then return end
 
-	if self:HitGround() then
+	if self:HitGround() and self:AngleBetweenNormal( self:GetUp(), Vector(0,0,1) ) < 45 then
 		return
 	end
 
@@ -163,6 +163,10 @@ function ENT:CheckGround()
 	end
 
 	self.HoverHeight = 50 + (200 / 5) * NumHits
+
+	if NumHits <= 3 then
+		return true
+	end
 
 	return HitMoveable == true
 end

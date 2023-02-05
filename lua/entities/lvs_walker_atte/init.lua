@@ -22,6 +22,7 @@ function ENT:OnSpawn( PObj )
 
 	local DriverSeat = self:AddDriverSeat( Vector(218,0,148), Angle(0,-90,0) )
 	DriverSeat:SetCameraDistance( 0.75 )
+	DriverSeat.PlaceBehindVelocity = 1000
 
 	self.SNDPrimary = self:AddSoundEmitter( Vector(250,0,148), "lvs/vehicles/atte/fire.mp3", "lvs/vehicles/atte/fire.mp3" )
 	self.SNDPrimary:SetSoundLevel( 110 )
@@ -31,6 +32,7 @@ function ENT:OnSpawn( PObj )
 
 	local TurretSeat = self:AddPassengerSeat( Vector(150,0,150), Angle(0,-90,0) )
 	TurretSeat.HidePlayer = true
+	TurretSeat.PlaceBehindVelocity = 1000
 	self:SetTurretSeat( TurretSeat )
 
 	local ID = self:LookupAttachment( "driver_turret" )
@@ -50,7 +52,9 @@ function ENT:OnSpawn( PObj )
 	self:SetGunnerSeat( GunnerSeat )
 
 	for i =1,4 do
-		self:AddPassengerSeat( Vector(75,-62.5 + i * 25,150), Angle(0,-90,0) ).HidePlayer = true
+		local Seat = self:AddPassengerSeat( Vector(75,-62.5 + i * 25,150), Angle(0,-90,0) )
+		Seat.HidePlayer = true
+		Seat.PlaceBehindVelocity = 1000
 	end
 
 	-- armor protecting the weakspot

@@ -71,9 +71,6 @@ local MoveY = {
 function ENT:GetAlignment( ent, phys )
 	local Rate = FrameTime() * 2
 
-	self._smBodyMoveX = self._smBodyMoveX or 0
-	self._smBodyMoveY = self._smBodyMoveY or 0
-
 	local UpdateLeg = self:GetUpdateLeg()
 
 	if self._oldUpdateLeg ~= UpdateLeg then
@@ -83,8 +80,8 @@ function ENT:GetAlignment( ent, phys )
 		self._smBodyMoveY = MoveY[ UpdateLeg ]
 	end
 
-	self._smBodyMoveX = self._smBodyMoveX - math.Clamp( self._smBodyMoveX, -Rate, Rate )
-	self._smBodyMoveY = self._smBodyMoveY - math.Clamp( self._smBodyMoveY, -Rate, Rate )
+	self._smBodyMoveX = self._smBodyMoveX and (self._smBodyMoveX - math.Clamp( self._smBodyMoveX, -Rate, Rate )) or 0
+	self._smBodyMoveY =  self._smBodyMoveY and (self._smBodyMoveY - math.Clamp( self._smBodyMoveY, -Rate, Rate )) or 0
 
 	local Pitch = 2 * self._smBodyMoveX
 	local Roll =  2 * self._smBodyMoveY

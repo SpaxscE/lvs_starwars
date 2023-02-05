@@ -130,6 +130,7 @@ function ENT:BecomeRagdoll()
 			end
 
 			if id == 2 then
+				legent:SetPoseParameter( "extrude", 175 )
 				local ID = ent:LookupAttachment( "upper" )
 				local Att = ent:GetAttachment( ID )
 				constraint.AdvBallsocket(ent, legent,0,0, ent:WorldToLocal( Att.Pos ), legent:WorldToLocal( Att.Pos ),0,0, -Lock, -Lock, -Lock, Lock, Lock, Lock, math.Rand(-Fric,Fric), math.Rand(-Fric,Fric), math.Rand(-Fric,Fric), 0, 1).DoNotDuplicate = true

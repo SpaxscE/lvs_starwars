@@ -30,7 +30,7 @@ ENT.ForceAngleDampingMultiplier = 1
 
 ENT.HoverHeight = 250
 ENT.HoverTraceLength = 300
-ENT.HoverHullRadius = 100
+ENT.HoverHullRadius = 25
 
 ENT.TurretTurnRate = 100
 

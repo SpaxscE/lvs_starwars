@@ -1,12 +1,20 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
+include("sv_ragdoll.lua")
+
+ENT.SpawnNormalOffset = 50
+ENT.SpawnNormalOffsetSpawner = 50
 
 function ENT:OnSpawn( PObj )
 	PObj:SetMass( 5000 )
 
 	local DriverSeat = self:AddDriverSeat( Vector(0,0,190), Angle(0,-90,0) )
 	DriverSeat:SetCameraDistance( 0.75 )
+
+	self:BecomeRagdoll()
+
+	if true then return end
 
 	local Legs = {
 		[1] = {
@@ -50,5 +58,5 @@ function ENT:OnSpawn( PObj )
 end
 
 function ENT:OnTick()
-	self:SetEngineActive( true )
+	--self:SetEngineActive( true )
 end

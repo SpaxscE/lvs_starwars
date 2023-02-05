@@ -77,7 +77,11 @@ else
 		local Forward = Base:GetForward()
 		local Vel = Base:GetVelocity()
 
-		local TraceStart = Base:LocalToWorld( StartPositions[ LocIndex ] ) + Vel
+		local Speed = Vel:Length()
+		local VelForwardMul = math.min( Speed / 100, 1 )
+		local VelForward = Vel:GetNormalized() * VelForwardMul + Forward * (1 - VelForwardMul)
+
+		local TraceStart = Base:LocalToWorld( StartPositions[ LocIndex ] ) + VelForward * math.Clamp( 400 - Speed * 2, 100, 200 ) * VelForwardMul
 
 		local trace = util.TraceLine( { 
 			start = TraceStart + Vector(0,0,400),

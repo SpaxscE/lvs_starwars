@@ -1,6 +1,10 @@
 
 function ENT:TransformNormal( ent, Normal )
-	ent.smNormal = ent.smNormal and ent.smNormal + (Normal - ent.smNormal) * FrameTime() * 2 or Normal
+	Normal.x = math.Clamp( Normal.x, -0.25, 0.25 )
+	Normal.y = math.Clamp( Normal.y, -0.25, 0.25 )
+	Normal:Normalize()
+
+	ent.smNormal = ent.smNormal and ent.smNormal + (Normal - ent.smNormal) * FrameTime() or Normal
 
 	return ent.smNormal
 end

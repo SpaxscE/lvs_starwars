@@ -55,16 +55,16 @@ function ENT:StartCommand( ply, cmd )
 end
 
 local MoveX = {
-	[1] = 1,
+	[1] = -1,
 	[2] = 1,
 	[3] = -1,
-	[4] = -1,
+	[4] = 1,
 }
 
 local MoveY = {
 	[1] = -1,
-	[2] = 1,
-	[3] = -1,
+	[2] = -1,
+	[3] = 1,
 	[4] = 1,
 }
 
@@ -86,7 +86,7 @@ function ENT:GetAlignment( ent, phys )
 	self._smBodyMoveX = self._smBodyMoveX - math.Clamp( self._smBodyMoveX, -Rate, Rate )
 	self._smBodyMoveY = self._smBodyMoveY - math.Clamp( self._smBodyMoveY, -Rate, Rate )
 
-	local Pitch = self._smBodyMoveX
+	local Pitch = 2 * self._smBodyMoveX
 	local Roll =  2 * self._smBodyMoveY
 
 	local Ang = self:LocalToWorldAngles( Angle(Pitch,0,Roll) )

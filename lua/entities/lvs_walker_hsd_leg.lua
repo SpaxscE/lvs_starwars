@@ -118,6 +118,27 @@ else
 		local ENDPOS = self._smPos + Up * 20
 
 		if self.MoveLeg then
+			local traceWater = util.TraceLine( {
+				start = TraceStart + Vector(0,0,200),
+				endpos = self._smPos,
+				filter = Base:GetCrosshairFilterEnts(),
+				mask = MASK_WATER,
+			} )
+
+			if traceWater.Hit then
+				local T = CurTime()
+
+				if (self._NextFX or 0) < T then
+					self._NextFX = T + 0.05
+	
+					local effectdata = EffectData()
+						effectdata:SetOrigin( traceWater.HitPos )
+						effectdata:SetEntity( Base )
+						effectdata:SetMagnitude( 50 )
+					util.Effect( "lvs_hover_water", effectdata )
+				end
+			end
+
 			if self.MoveDelta >= 1 then
 				self.MoveLeg = false
 				self.MoveDelta = nil

@@ -3,8 +3,8 @@
 	"$basetexture" "models/blu/hsd/homing_texture"
 
 	"$detail" "models/blu/laat/details/detail_metal"
-	"$detailscale"		"13"
-	"$detailblendfactor"		"0.75"	
+	"$detailscale"		"25"
+	"$detailblendfactor"		"0.85"	
 
 	"$halflambert" "1"
 }

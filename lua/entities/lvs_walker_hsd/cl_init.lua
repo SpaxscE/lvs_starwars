@@ -7,7 +7,9 @@ ENT.GlowColor = Color( 255, 0, 0, 255)
 ENT.GlowMaterial = Material( "sprites/light_glow02_add" )
 
 function ENT:PreDrawTranslucent()
-	
+
+	if self:GetIsRagdoll() then return false end
+
 	render.SetMaterial( self.GlowMaterial )
 	render.DrawSprite( self:LocalToWorld( self.GlowPos1 ), 32, 32, self.GlowColor )
 	render.DrawSprite( self:LocalToWorld( self.GlowPos2 ), 16, 16, self.GlowColor )

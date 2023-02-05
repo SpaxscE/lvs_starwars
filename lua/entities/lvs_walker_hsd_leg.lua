@@ -121,7 +121,7 @@ else
 				sound.Play( Sound( "lvs/vehicles/hsd/footstep0"..math.random(1,3)..".wav" ), ENDPOS, SNDLVL_100dB )
 
 				local effectdata = EffectData()
-					effectdata:SetOrigin( trace.HitPos + trace.HitNormal * 15 )
+					effectdata:SetOrigin( trace.HitPos )
 				util.Effect( "lvs_walker_stomp", effectdata )
 
 				sound.Play( Sound( "lvs/vehicles/hsd/hydraulic_start0"..math.random(1,2)..".wav" ), self:GetPos(), SNDLVL_100dB )

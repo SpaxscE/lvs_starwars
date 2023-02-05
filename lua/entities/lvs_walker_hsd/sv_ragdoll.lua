@@ -1,10 +1,35 @@
 
+function ENT:UnRagdoll()
+	if not self.Constrainer then return end
+
+	self:SetTargetSpeed( 200 )
+	self:SetIsRagdoll( false )
+
+	for _, ent in pairs( self.Constrainer ) do
+		if not IsValid( ent ) then continue end
+
+		if ent == self then continue end
+
+		ent:Remove()
+	end
+
+	self.Constrainer = nil
+
+	self.DoNotDuplicate = false
+end
+
 function ENT:BecomeRagdoll()
 	if self.Constrainer then return end
+
+	self:SetIsRagdoll( true )
+
+	self:EmitSound( "lvs/vehicles/atte/becomeragdoll.ogg", 85 )
 
 	self.Constrainer = {
 		[0] = self,
 	}
+
+	self.DoNotDuplicate = true
 
 	local Leg = {
 		[1] = {
@@ -51,25 +76,6 @@ function ENT:BecomeRagdoll()
 			ang = -35,
 		},
 	}
-
-	--[[
-	for _, data in pairs( Legs ) do
-		local ID = self:LookupAttachment( data.name )
-		local Att = self:GetAttachment( ID )
-
-		if not Att then self:Remove() return end
-
-		local Leg = ents.Create( "lvs_walker_hsd_leg" )
-		Leg:SetPos( Att.Pos )
-		Leg:SetAngles( self:LocalToWorldAngles( Angle(0,data.ang,0) ) )
-		Leg:Spawn()
-		Leg:Activate()
-		Leg:SetParent( self, ID )
-		Leg:SetBase( self )
-		Leg:SetBaseAngle( data.ang )
-		Leg:SetLocationIndex( data.id )
-	end
-	]]
 
 	local Fric = 1500
 	local Index = 0
@@ -155,4 +161,40 @@ function ENT:BecomeRagdoll()
 		end
 	end
 
+	self:ForceMotion()
+end
+
+function ENT:NudgeRagdoll()
+	if not istable( self.Constrainer ) then return end
+
+	for _, ent in pairs( self.Constrainer ) do
+		if not IsValid( ent ) or ent == self then continue end
+
+		local PhysObj = ent:GetPhysicsObject()
+
+		if not IsValid( PhysObj ) then continue end
+
+		PhysObj:EnableMotion( false )
+
+		ent:SetPos( ent:GetPos() + self:GetUp() * 100 )
+
+		timer.Simple( FrameTime() * 2, function()
+			if not IsValid( ent ) then return end
+
+			local PhysObj = ent:GetPhysicsObject()
+			if IsValid( PhysObj ) then
+				PhysObj:EnableMotion( true )
+			end
+		end)
+	end
+end
+
+function ENT:ForceMotion()
+	local phys = self:GetPhysicsObject()
+
+	if not IsValid( phys ) then return end
+
+	if not phys:IsMotionEnabled() then
+		phys:EnableMotion( true )
+	end
 end

@@ -1,7 +1,10 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 include("shared.lua")
+include("sv_contraption.lua")
+include("sv_controls.lua")
 include("sv_ragdoll.lua")
+include("sv_ai.lua")
 
 ENT.SpawnNormalOffset = 50
 ENT.SpawnNormalOffsetSpawner = 50
@@ -11,10 +14,6 @@ function ENT:OnSpawn( PObj )
 
 	local DriverSeat = self:AddDriverSeat( Vector(0,0,190), Angle(0,-90,0) )
 	DriverSeat:SetCameraDistance( 0.75 )
-
-	self:BecomeRagdoll()
-
-	if true then return end
 
 	local Legs = {
 		[1] = {
@@ -55,8 +54,40 @@ function ENT:OnSpawn( PObj )
 		Leg:SetBaseAngle( data.ang )
 		Leg:SetLocationIndex( data.id )
 	end
+
+	self:AddDS( {
+		pos = Vector(0,0,200),
+		ang = Angle(0,0,0),
+		mins = Vector(-100,-100,-100),
+		maxs =  Vector(100,100,100),
+		Callback = function( tbl, ent, dmginfo )
+			if dmginfo:GetDamage() <= 0 then return end
+
+			if ent:GetHP() > 1000 or self:GetIsRagdoll() then return end
+
+			ent:BecomeRagdoll()
+
+			local effectdata = EffectData()
+				effectdata:SetOrigin( self:LocalToWorld( Vector(0,0,80) ) )
+			util.Effect( "lvs_explosion_nodebris", effectdata )
+		end
+	} )
 end
 
 function ENT:OnTick()
-	--self:SetEngineActive( true )
+	self:ContraptionThink()
+end
+
+function ENT:OnMaintenance()
+	self:UnRagdoll()
+end
+
+function ENT:AlignView( ply, SetZero )
+	if not IsValid( ply ) then return end
+
+	timer.Simple( 0, function()
+		if not IsValid( ply ) or not IsValid( self ) then return end
+
+		ply:SetEyeAngles( Angle(0,90,0) )
+	end)
 end

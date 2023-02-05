@@ -21,7 +21,7 @@ ENT.GibModels = {
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 12000
+ENT.MaxHealth = 6000
 
 ENT.ForceLinearMultiplier = 1
 
@@ -30,7 +30,7 @@ ENT.ForceAngleDampingMultiplier = 1
 
 ENT.HoverHeight = 250
 ENT.HoverTraceLength = 300
-ENT.HoverHullRadius = 20
+ENT.HoverHullRadius = 100
 
 ENT.TurretTurnRate = 100
 
@@ -40,5 +40,61 @@ ENT.CanMoveOn = {
 	["prop_physics"] = true,
 }
 
+ENT.lvsShowInSpawner = true
+
 function ENT:OnSetupDataTables()
+	self:AddDT( "Float", "Move" )
+	self:AddDT( "Bool", "IsMoving" )
+	self:AddDT( "Bool", "IsRagdoll" )
+	self:AddDT( "Vector", "AIAimVector" )
+end
+
+function ENT:GetEyeTrace()
+	local startpos = self:GetPos()
+
+	local pod = self:GetDriverSeat()
+
+	if IsValid( pod ) then
+		startpos = pod:LocalToWorld( Vector(0,0,33) )
+	end
+
+	local trace = util.TraceLine( {
+		start = startpos,
+		endpos = (startpos + self:GetAimVector() * 50000),
+		filter = self:GetCrosshairFilterEnts()
+	} )
+
+	return trace
+end
+
+function ENT:GetAimVector()
+	if self:GetAI() then
+		return self:GetAIAimVector()
+	end
+
+	local Driver = self:GetDriver()
+
+	if IsValid( Driver ) then
+		return Driver:GetAimVector()
+	else
+		return self:GetForward()
+	end
+end
+
+function ENT:GetAimAngles()
+	local trace = self:GetEyeTrace()
+
+	local AimAngles = self:WorldToLocalAngles( (trace.HitPos - self:LocalToWorld( Vector(265,0,100)) ):GetNormalized():Angle() )
+
+	local ID = self:LookupAttachment( "muzzle_right_up" )
+	local Muzzle = self:GetAttachment( ID )
+
+	if not Muzzle then return AimAngles, trace.HitPos, false end
+
+	local DirAng = self:WorldToLocalAngles( (trace.HitPos - self:GetDriverSeat():LocalToWorld( Vector(0,0,33) ) ):Angle() )
+
+	return AimAngles, trace.HitPos, (math.abs( DirAng.p ) < 12 and math.abs( DirAng.y ) < 35)
+end
+
+function ENT:InitWeapons()
 end

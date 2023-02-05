@@ -9,18 +9,6 @@ function ENT:SetupDataTables()
 end
 
 if SERVER then
-	function ENT:SpawnFunction( ply, tr, ClassName )
-		if not tr.Hit then return end
-
-		local ent = ents.Create( ClassName )
-		ent:SetPos( tr.HitPos + tr.HitNormal * 1 )
-		ent:Spawn()
-		ent:Activate()
-
-		return ent
-
-	end
-
 	function ENT:Initialize()	
 		self:SetModel( "models/blu/hsd_leg_1.mdl" )
 		self:SetMoveType( MOVETYPE_NONE )
@@ -60,6 +48,12 @@ else
 		local Base = self:GetBase()
 
 		if not IsValid( Base ) then return end
+
+		if Base:GetIsRagdoll() then 
+			self:LegClearAll()
+
+			return
+		end
 
 		local Y = self:GetBaseAngle() + (Offsets[ self:GetLocationIndex() ] or 0)
 
@@ -103,5 +97,15 @@ else
 
 	function ENT:OnRemove()
 		self:OnRemoved()
+	end
+
+	function ENT:Draw()
+		local Base = self:GetBase()
+
+		if not IsValid( Base ) then return end
+
+		if Base:GetIsRagdoll() then return end
+
+		self:DrawModel()
 	end
 end

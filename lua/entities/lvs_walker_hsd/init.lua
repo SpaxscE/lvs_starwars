@@ -65,6 +65,10 @@ function ENT:OnSpawn( PObj )
 		Callback = function( tbl, ent, dmginfo )
 			if ent:GetHP() > 500 or self:GetIsRagdoll() then return end
 
+			local effectdata = EffectData()
+				effectdata:SetOrigin( ent:LocalToWorld( Vector(0,0,250) ) )
+			util.Effect( "lvs_explosion_nodebris", effectdata )
+
 			ent:BecomeRagdoll()
 		end
 	} )
@@ -74,8 +78,6 @@ function ENT:OnSpawn( PObj )
 		ang = Angle(0,0,0),
 		mins = Vector(-30,-50,-20),
 		maxs =  Vector(30,50,20),
-		Callback = function( tbl, ent, dmginfo )
-		end
 	} )
 
 	-- weak points
@@ -94,7 +96,7 @@ function ENT:OnSpawn( PObj )
 			ent:BecomeRagdoll()
 
 			local effectdata = EffectData()
-				effectdata:SetOrigin( self:LocalToWorld( Vector(0,0,80) ) )
+				effectdata:SetOrigin( ent:LocalToWorld( Vector(0,0,250) ) )
 			util.Effect( "lvs_explosion_nodebris", effectdata )
 		end
 	} )
@@ -109,12 +111,12 @@ function ENT:OnSpawn( PObj )
 
 			dmginfo:ScaleDamage( 1.5 )
 
-			if ent:GetHP() > 2500 or self:GetIsRagdoll() then return end
+			if ent:GetHP() > 2500 or ent:GetIsRagdoll() then return end
 
 			ent:BecomeRagdoll()
 
 			local effectdata = EffectData()
-				effectdata:SetOrigin( self:LocalToWorld( Vector(0,0,80) ) )
+				effectdata:SetOrigin( ent:LocalToWorld( Vector(0,0,250) ) )
 			util.Effect( "lvs_explosion_nodebris", effectdata )
 		end
 	} )
@@ -129,12 +131,12 @@ function ENT:OnSpawn( PObj )
 
 			dmginfo:ScaleDamage( 1.5 )
 
-			if ent:GetHP() > 2500 or self:GetIsRagdoll() then return end
+			if ent:GetHP() > 2500 or ent:GetIsRagdoll() then return end
 
 			ent:BecomeRagdoll()
 
 			local effectdata = EffectData()
-				effectdata:SetOrigin( self:LocalToWorld( Vector(0,0,80) ) )
+				effectdata:SetOrigin( ent:LocalToWorld( Vector(0,0,250) ) )
 			util.Effect( "lvs_explosion_nodebris", effectdata )
 		end
 	} )

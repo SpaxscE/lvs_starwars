@@ -88,12 +88,12 @@ function ENT:OnSpawn( PObj )
 
 			dmginfo:ScaleDamage( 2 )
 
-			if ent:GetHP() > 4000 or self:GetIsRagdoll() then return end
+			if ent:GetHP() > 4000 or ent:GetIsRagdoll() then return end
 
 			ent:BecomeRagdoll()
 
 			local effectdata = EffectData()
-				effectdata:SetOrigin( self:LocalToWorld( Vector(0,0,80) ) )
+				effectdata:SetOrigin( ent:LocalToWorld( Vector(0,0,80) ) )
 			util.Effect( "lvs_explosion_nodebris", effectdata )
 		end
 	} )
@@ -108,12 +108,12 @@ function ENT:OnSpawn( PObj )
 
 			dmginfo:ScaleDamage( 1.5 )
 
-			if ent:GetHP() > 4000 or self:GetIsRagdoll() then return end
+			if ent:GetHP() > 4000 or ent:GetIsRagdoll() then return end
 
 			ent:BecomeRagdoll()
 
 			local effectdata = EffectData()
-				effectdata:SetOrigin( self:LocalToWorld( Vector(0,0,80) ) )
+				effectdata:SetOrigin( ent:LocalToWorld( Vector(0,0,80) ) )
 			util.Effect( "lvs_explosion_nodebris", effectdata )
 		end
 	} )

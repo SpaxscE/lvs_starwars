@@ -1,6 +1,57 @@
 include("shared.lua")
 include("cl_camera.lua")
 
+function ENT:OnFrame()
+	self:DamageFX()
+end
+	
+function ENT:DamageFX()
+	self.nextDFX = self.nextDFX or 0
+
+	if self.nextDFX < CurTime() then
+		self.nextDFX = CurTime() + 0.05
+
+		if self:GetIsRagdoll() then
+			if math.random(0,45) < 3 then
+				if math.random(1,2) == 1 then
+					local Pos = self:LocalToWorld( Vector(0,0,250) + VectorRand() * 80 )
+					local effectdata = EffectData()
+						effectdata:SetOrigin( Pos )
+					util.Effect( "cball_explode", effectdata, true, true )
+					
+					sound.Play( "lvs/vehicles/atte/spark"..math.random(1,4)..".ogg", Pos, 75 )
+				end
+			end
+		end
+
+		local HP = self:GetHP()
+		local MaxHP = self:GetMaxHP()
+
+		if HP > MaxHP * 0.5 then return end
+
+		local effectdata = EffectData()
+			effectdata:SetOrigin( self:LocalToWorld( Vector(0,0,260) + VectorRand() * 80 ) )
+			effectdata:SetEntity( self )
+		util.Effect( "lvs_engine_blacksmoke", effectdata )
+
+		if HP <= MaxHP * 0.25 then
+			local effectdata = EffectData()
+				effectdata:SetOrigin( self:LocalToWorld( Vector(0,90,210) ) )
+				effectdata:SetNormal( self:GetUp() )
+				effectdata:SetMagnitude( math.Rand(1,3) )
+				effectdata:SetEntity( self )
+			util.Effect( "lvs_exhaust_fire", effectdata )
+
+			local effectdata = EffectData()
+				effectdata:SetOrigin( self:LocalToWorld( Vector(0,-90,210) ) )
+				effectdata:SetNormal( self:GetUp() )
+				effectdata:SetMagnitude( math.Rand(1,3) )
+				effectdata:SetEntity( self )
+			util.Effect( "lvs_exhaust_fire", effectdata )
+		end
+	end
+end
+
 ENT.GlowPos1 = Vector(46,-2.89,294.88)
 ENT.GlowPos2 = Vector(41.15,5.82,295.63)
 ENT.GlowColor = Color( 255, 0, 0, 255)

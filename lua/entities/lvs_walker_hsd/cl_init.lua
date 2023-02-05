@@ -90,17 +90,20 @@ function ENT:PaintZoom( X, Y, ply )
 	surface.DrawTexturedRectRotated( X * 0.5, Y + Y * 0.5, X, Y, 180 )
 end
 
+local COLOR_RED = Color(255,0,0,255)
+local COLOR_WHITE = Color(255,255,255,255)
+
 function ENT:LVSHudPaint( X, Y, ply )
 	if ply ~= self:GetDriver() then
-		local pod = ply:GetVehicle()
-
 		return
 	end
 
-	local Pos2D = self:GetEyeTrace().HitPos:ToScreen()
+	local Col = self:WeaponsInRange() and COLOR_WHITE or COLOR_RED
 
-	self:PaintCrosshairCenter( Pos2D )
-	self:PaintCrosshairOuter( Pos2D )
+	local Pos2D = self:GetEyeTrace().HitPos:ToScreen() 
+
+	self:PaintCrosshairCenter( Pos2D, Col )
+	self:PaintCrosshairOuter( Pos2D, Col )
 	self:LVSPaintHitMarker( Pos2D )
 
 	self:PaintZoom( X, Y, ply )

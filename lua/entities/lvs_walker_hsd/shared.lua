@@ -11,7 +11,7 @@ ENT.AdminSpawnable	= false
 
 ENT.MDL = "models/blu/hsd.mdl"
 ENT.GibModels = {
-	"models/blu/hsd.mdl",
+	"models/blu/hsd_gib.mdl",
 	"models/blu/hsd_foot.mdl",
 	"models/blu/hsd_leg_1.mdl",
 	"models/blu/hsd_leg_2.mdl",
@@ -80,6 +80,13 @@ function ENT:GetAimVector()
 	else
 		return self:GetForward()
 	end
+end
+
+function ENT:WeaponsInRange()
+	local Forward = self:GetForward()
+	local AimForward = self:GetAimVector()
+
+	return self:AngleBetweenNormal( Forward, AimForward ) < 45
 end
 
 function ENT:InitWeapons()

@@ -107,35 +107,62 @@ function ENT:CheckMotion( OnMoveableFloor )
 	end
 end
 
+local StartPositions = {
+	[1] = Vector(0,0,0),
+	[2] = Vector(150,270,0),
+	[3] = Vector(150,-270,0),
+	[4] = Vector(-150,270,0),
+	[5] = Vector(-150,-270,0),
+}
+
 function ENT:CheckGround()
+	local NumHits = 0
+	local FirstTraceHasHit = false
+	local HitMoveable
 
 	local phys = self:GetPhysicsObject()
 
 	if not IsValid( phys ) then return false end
 
-	local masscenter = phys:LocalToWorld( phys:GetMassCenter() )
+	for id, pos in ipairs( StartPositions ) do
+		local masscenter = phys:LocalToWorld( phys:GetMassCenter() + pos )
 
-	local trace =  util.TraceHull( {
-		start = masscenter, 
-		endpos = masscenter - self:GetUp() * self.HoverTraceLength,
-		mins = Vector( -self.HoverHullRadius, -self.HoverHullRadius, 0 ),
-		maxs = Vector( self.HoverHullRadius, self.HoverHullRadius, 0 ),
-		filter = function( entity ) 
-			if self:GetCrosshairFilterLookup()[ entity:EntIndex() ] or entity:IsPlayer() or entity:IsNPC() or entity:IsVehicle() or self.HoverCollisionFilter[ entity:GetCollisionGroup() ] then
-				return false
+		local trace =  util.TraceHull( {
+			start = masscenter, 
+			endpos = masscenter - self:GetUp() * self.HoverTraceLength,
+			mins = Vector( -self.HoverHullRadius, -self.HoverHullRadius, 0 ),
+			maxs = Vector( self.HoverHullRadius, self.HoverHullRadius, 0 ),
+			filter = function( entity ) 
+				if self:GetCrosshairFilterLookup()[ entity:EntIndex() ] or entity:IsPlayer() or entity:IsNPC() or entity:IsVehicle() or self.HoverCollisionFilter[ entity:GetCollisionGroup() ] then
+					return false
+				end
+
+				return true
+			end,
+		} )
+
+		if id == 1 then
+			FirstTraceHasHit = trace.Hit
+		end
+
+		if not HitMoveable then
+			if IsValid( trace.Entity ) then
+				HitMoveable = self.CanMoveOn[ trace.Entity:GetClass() ]
 			end
+		end
 
-			return true
-		end,
-	} )
+		if not trace.Hit or trace.HitSky then continue end
 
-	if self:GetNWGround() ~= trace.Hit then
-		self:SetNWGround( trace.Hit )
+		NumHits = NumHits + 1
 	end
 
-	if IsValid( trace.Entity ) then
-		return self.CanMoveOn[ trace.Entity:GetClass() ] == true
-	else
-		return false
+	local HitGround = NumHits >= (FirstTraceHasHit and 3 or 1)
+
+	if self:GetNWGround() ~= HitGround then
+		self:SetNWGround( HitGround )
 	end
+
+	self.HoverHeight = 50 + (200 / 5) * NumHits
+
+	return HitMoveable == true
 end

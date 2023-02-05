@@ -157,11 +157,11 @@ function ENT:InitWeapons()
 
 		local AimAnglesR, AimAnglesL = ent:GetAimAngles()
 
-		self:SetPoseParameter("cannon_right_pitch", AimAnglesR.p )
-		self:SetPoseParameter("cannon_right_yaw", AimAnglesR.y )
+		ent:SetPoseParameter("cannon_right_pitch", AimAnglesR.p )
+		ent:SetPoseParameter("cannon_right_yaw", AimAnglesR.y )
 
-		self:SetPoseParameter("cannon_left_pitch", AimAnglesL.p )
-		self:SetPoseParameter("cannon_left_yaw", AimAnglesL.y )
+		ent:SetPoseParameter("cannon_left_pitch", AimAnglesL.p )
+		ent:SetPoseParameter("cannon_left_yaw", AimAnglesL.y )
 	end
 	self:AddWeapon( weapon )
 

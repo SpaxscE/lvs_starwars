@@ -120,7 +120,7 @@ else
 		if self.MoveLeg then
 			local traceWater = util.TraceLine( {
 				start = TraceStart + Vector(0,0,200),
-				endpos = self._smPos,
+				endpos = ENDPOS,
 				filter = Base:GetCrosshairFilterEnts(),
 				mask = MASK_WATER,
 			} )

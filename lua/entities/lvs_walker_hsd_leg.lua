@@ -110,6 +110,7 @@ else
 			self.MoveDelta = 0
 		end
 
+		local ShaftOffset = 0
 		local ENDPOS = self._smPos + Up * 20
 
 		if self.MoveLeg then
@@ -129,16 +130,21 @@ else
 	
 				self._smPos = LerpVector( self.MoveDelta, self._OldPos, trace.HitPos )
 
-				ENDPOS = ENDPOS + Up * math.max( math.sin( self.MoveDelta * math.pi ), 0 ) * 50
+				local MulZ =  math.max( math.sin( self.MoveDelta * math.pi ), 0 )
+
+				ShaftOffset = MulZ ^ 2 * 30
+				ENDPOS = ENDPOS + Up * MulZ * 50
 			end
 		else
 			self._OldPos = self._smPos
 		end
 
-		self:RunIK( ENDPOS, Base )
+		self:RunIK( ENDPOS, Base, ShaftOffset )
 	end
 
-	function ENT:RunIK( ENDPOS, Base )
+	function ENT:RunIK( ENDPOS, Base, shaftoffset )
+		shaftoffset = shaftoffset or 0
+
 		local Ang = Base:WorldToLocalAngles( (ENDPOS - self:GetPos()):Angle() )
 
 		self:SetAngles( Base:LocalToWorldAngles( Angle(0,Ang.y + 90,0) ) )
@@ -157,6 +163,9 @@ else
 		if not self.IK_Joints[ 1 ] or not IsValid( self.IK_Joints[ 1 ].Attachment2 ) then return end
 
 		local shaft = self.IK_Joints[ 1 ].Attachment2
+
+		shaft:SetPoseParameter( "extrude", shaftoffset )
+		shaft:InvalidateBoneCache()
 
 		local ID1 = self:LookupAttachment( "upper" )
 		local Start = self:GetAttachment( ID1 )

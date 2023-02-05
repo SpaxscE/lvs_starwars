@@ -30,7 +30,7 @@ ENT.ForceAngleDampingMultiplier = 1
 
 ENT.HoverHeight = 250
 ENT.HoverTraceLength = 300
-ENT.HoverHullRadius = 25
+ENT.HoverHullRadius = 50
 
 ENT.TurretTurnRate = 100
 
@@ -80,21 +80,6 @@ function ENT:GetAimVector()
 	else
 		return self:GetForward()
 	end
-end
-
-function ENT:GetAimAngles()
-	local trace = self:GetEyeTrace()
-
-	local AimAngles = self:WorldToLocalAngles( (trace.HitPos - self:LocalToWorld( Vector(265,0,100)) ):GetNormalized():Angle() )
-
-	local ID = self:LookupAttachment( "muzzle_right_up" )
-	local Muzzle = self:GetAttachment( ID )
-
-	if not Muzzle then return AimAngles, trace.HitPos, false end
-
-	local DirAng = self:WorldToLocalAngles( (trace.HitPos - self:GetDriverSeat():LocalToWorld( Vector(0,0,33) ) ):Angle() )
-
-	return AimAngles, trace.HitPos, (math.abs( DirAng.p ) < 12 and math.abs( DirAng.y ) < 35)
 end
 
 function ENT:InitWeapons()

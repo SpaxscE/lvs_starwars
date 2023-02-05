@@ -84,7 +84,7 @@ else
 		local TraceStart = Base:LocalToWorld( StartPositions[ LocIndex ] ) + VelForward * math.Clamp( 400 - Speed * 2, 100, 200 ) * VelForwardMul
 
 		local trace = util.TraceLine( { 
-			start = TraceStart + Vector(0,0,400),
+			start = TraceStart + Vector(0,0,200),
 			endpos = TraceStart - Vector(0,0,100), 
 			filter = function( ent ) 
 				if ent == Base or Base.HoverCollisionFilter[ ent:GetCollisionGroup() ] then return false end 

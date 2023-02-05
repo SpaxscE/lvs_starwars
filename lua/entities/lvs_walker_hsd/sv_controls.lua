@@ -57,16 +57,20 @@ end
 function ENT:GetAlignment( ent, phys )
 	local Move = self:GetMove()
 
-	local P = 0--math.cos( math.rad(Move * 2) ) * 3
-	local R = 0--math.cos( math.rad(Move) ) * 2
+	local P = math.cos( math.rad(Move) )
+	local R = -math.cos( math.rad(Move * 2) )
 
-	local Ang = self:LocalToWorldAngles( Angle(P,0,R) )
+	local Pitch = math.abs( P ) ^ 10 * self:Sign( P ) * 2
+	local Roll = math.abs( R ) ^ 10 * self:Sign( R ) * 2
+	local Ang = self:LocalToWorldAngles( Angle(Pitch,0,Roll) )
 
 	return Ang:Forward(), Ang:Right()
 end
 
 function ENT:CalcMove( speed )
-	self:SetMove( self:GetMove() + speed * 0.027 )
+	local PhysObj = self:GetPhysicsObject()
+
+	self:SetMove( self:GetMove() + speed * (0.015 + math.abs( PhysObj:GetAngleVelocity().z * 0.000125 )) )
 
 	local Move = self:GetMove()
 

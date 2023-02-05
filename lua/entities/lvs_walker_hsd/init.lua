@@ -51,7 +51,6 @@ function ENT:OnSpawn( PObj )
 		Leg:Activate()
 		Leg:SetParent( self, ID )
 		Leg:SetBase( self )
-		Leg:SetBaseAngle( data.ang )
 		Leg:SetLocationIndex( data.id )
 	end
 

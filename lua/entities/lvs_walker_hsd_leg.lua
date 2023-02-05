@@ -4,7 +4,6 @@ ENT.Type            = "anim"
 
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
-	self:NetworkVar( "Int",0, "BaseAngle" )
 	self:NetworkVar( "String",0, "LocationIndex" )
 end
 
@@ -37,11 +36,18 @@ else
 		Leg1 = {MDL = "models/blu/hsd_leg_3.mdl", Ang = Angle(0,90,-90), Pos = Vector(0,0,0)},
 	}
 
-	local Offsets = {
-		["FL"] = -35,
-		["FR"] = 35,
-		["RL"] = 35,
-		["RR"] = -35,
+	local StartPositions = {
+		["FL"] = Vector(150,270,0),
+		["FR"] = Vector(150,-270,0),
+		["RL"] = Vector(-150,270,0),
+		["RR"] = Vector(-150,-270,0),
+	}
+
+	local Cycl = {
+		["FL"] = 0,
+		["FR"] = 90,
+		["RL"] = 180,
+		["RR"] = 270,
 	}
 
 	function ENT:Think()
@@ -55,16 +61,86 @@ else
 			return
 		end
 
-		local Y = self:GetBaseAngle() + (Offsets[ self:GetLocationIndex() ] or 0)
+		local LocIndex = self:GetLocationIndex()
 
-		self:SetAngles( Base:LocalToWorldAngles( Angle(0,Y,0) ) )
+		local Up = Base:GetUp()
+		local Forward = Base:GetForward()
+		local Vel = Base:GetVelocity()
+
+		local IsMoving = Base:GetIsMoving()
+
+		local TraceStart = Base:LocalToWorld( StartPositions[ LocIndex ] ) + Vel
+
+		local trace = util.TraceLine( { 
+			start = TraceStart + Vector(0,0,400),
+			endpos = TraceStart - Vector(0,0,100), 
+			filter = function( ent ) 
+				if ent == Base or Base.HoverCollisionFilter[ ent:GetCollisionGroup() ] then return false end 
+
+				return true
+			end,
+		} )
+
+		local Move = Base:GetMove()
+
+		local UpdateLeg = math.cos( math.rad( Move + Cycl[ LocIndex ] ) ) > 0.9
+
+		self._OldPos = self._OldPos or trace.HitPos
+		self._smPos = self._smPos or self._OldPos
+
+		if self._OldUpdateLeg ~= UpdateLeg then
+			self._OldUpdateLeg = UpdateLeg
+
+			if UpdateLeg then
+				self.UpdateNow = true
+			end
+		end
+
+		if self.UpdateNow and not self.MoveLeg then
+			sound.Play( Sound( "lvs/vehicles/hsd/hydraulic_stop0"..math.random(1,2)..".wav" ), self:GetPos(), SNDLVL_100dB )
+
+			self.UpdateNow = nil
+			self.MoveLeg = true
+			self.MoveDelta = 0
+		end
+
+		local ENDPOS = self._smPos + Up * 20
+
+		if self.MoveLeg then
+			if self.MoveDelta >= 1 then
+				self.MoveLeg = false
+				self.MoveDelta = nil
+
+				sound.Play( Sound( "lvs/vehicles/hsd/footstep0"..math.random(1,3)..".wav" ), ENDPOS, SNDLVL_100dB )
+
+				local effectdata = EffectData()
+					effectdata:SetOrigin( trace.HitPos + trace.HitNormal * 15 )
+				util.Effect( "lvs_walker_stomp", effectdata )
+
+				sound.Play( Sound( "lvs/vehicles/hsd/hydraulic_start0"..math.random(1,2)..".wav" ), self:GetPos(), SNDLVL_100dB )
+			else
+				self.MoveDelta = math.min( self.MoveDelta + RealFrameTime() * 2, 1 )
+	
+				self._smPos = LerpVector( self.MoveDelta, self._OldPos, trace.HitPos )
+
+				ENDPOS = ENDPOS + Up * math.max( math.sin( self.MoveDelta * math.pi ), 0 ) * 50
+			end
+		else
+			self._OldPos = self._smPos
+		end
+
+		self:RunIK( ENDPOS, Base )
+	end
+
+	function ENT:RunIK( ENDPOS, Base )
+		local Ang = Base:WorldToLocalAngles( (ENDPOS - self:GetPos()):Angle() )
+
+		self:SetAngles( Base:LocalToWorldAngles( Angle(0,Ang.y + 90,0) ) )
 
 		local ID = self:LookupAttachment( "lower" )
 		local Att = self:GetAttachment( ID )
 
 		if not Att then return end
-
-		local ENDPOS = util.TraceLine( { start = self:LocalToWorld( Vector(0,-270,0) ), endpos = self:LocalToWorld( Vector(0,-270,-300) ), filter = self } ).HitPos + Vector(0,0,25)
 
 		local Pos, Ang = WorldToLocal( ENDPOS, (ENDPOS - Att.Pos):Angle(), Att.Pos, self:LocalToWorldAngles( Angle(0,-90,0) ) )
 

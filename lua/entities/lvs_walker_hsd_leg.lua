@@ -43,18 +43,11 @@ else
 		["RR"] = Vector(-150,-270,0),
 	}
 
-	local Cycl = {
-		["FL"] = 0,
-		["FR"] = 90,
-		["RL"] = 180,
-		["RR"] = 270,
-	}
-
 	local LocToID = {
-		[1] = "FL",
-		[2] = "FR",
-		[3] = "RL",
-		[4] = "RR",
+		[1] = "RL",
+		[2] = "FL",
+		[3] = "RR",
+		[4] = "FR",
 	}
 
 	function ENT:Think()

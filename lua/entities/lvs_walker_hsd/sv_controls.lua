@@ -105,7 +105,7 @@ function ENT:GetMoveXY( ent, phys, deltatime )
 end
 
 function ENT:GetSteer( ent, phys )
-	local Steer = -phys:GetAngleVelocity().z * 0.5
+	local Steer = -phys:GetAngleVelocity().z * 0.8
 
 	if not IsValid( self:GetDriver() ) and not self:GetAI() then return Steer end
 

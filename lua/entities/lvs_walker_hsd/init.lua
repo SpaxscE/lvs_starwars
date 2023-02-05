@@ -1,11 +1,13 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "cl_camera.lua" )
+AddCSLuaFile( "sh_weapons.lua" )
 include("shared.lua")
 include("sv_contraption.lua")
 include("sv_controls.lua")
 include("sv_ragdoll.lua")
 include("sv_ai.lua")
+include("sh_weapons.lua")
 
 ENT.SpawnNormalOffset = 50
 ENT.SpawnNormalOffsetSpawner = 50
@@ -140,6 +142,12 @@ function ENT:OnSpawn( PObj )
 			util.Effect( "lvs_explosion_nodebris", effectdata )
 		end
 	} )
+
+	local ID = self:LookupAttachment( "muzzle_secondary" )
+	local Muzzle = self:GetAttachment( ID )
+	self.SNDTurret = self:AddSoundEmitter( self:WorldToLocal( Muzzle.Pos ), "lvs/vehicles/hsd/fire.mp3", "lvs/vehicles/hsd/fire.mp3" )
+	self.SNDTurret:SetSoundLevel( 110 )
+	self.SNDTurret:SetParent( self, ID )
 end
 
 function ENT:OnTick()

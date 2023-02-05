@@ -82,16 +82,6 @@ function ENT:GetAimVector()
 	end
 end
 
-function ENT:WeaponsInRange()
-	local Forward = self:GetForward()
-	local AimForward = self:GetAimVector()
-
-	return self:AngleBetweenNormal( Forward, AimForward ) < 45
-end
-
-function ENT:InitWeapons()
-end
-
 function ENT:HitGround()
 	return self:GetNWGround()
 end

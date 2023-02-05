@@ -18,11 +18,16 @@ end
 function ENT:InitWeapons()
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/hmg.png")
-	weapon.Ammo = 600
+	weapon.Ammo = 100
 	weapon.Delay = 0.5
 	weapon.HeatRateUp = 0.5
 	weapon.HeatRateDown = 0.4
 	weapon.OnOverheat = function( ent )
+		timer.Simple( 0.4, function()
+			if not IsValid( ent ) then return end
+
+			ent:EmitSound("lvs/overheat.wav")
+		end )
 	end
 	weapon.Attack = function( ent )
 		if not ent:WeaponsInRange() then return true end
@@ -43,15 +48,15 @@ function ENT:InitWeapons()
 
 			local bullet = {}
 			bullet.Src 	= Muzzle.Pos
-			bullet.Dir 	= (ent:GetEyeTrace().HitPos - Muzzle.Pos):GetNormalized()
+			bullet.Dir 	= ent:WeaponsInRange() and (ent:GetEyeTrace().HitPos - Muzzle.Pos):GetNormalized() or -Muzzle.Ang:Right()
 			bullet.Spread 	= Vector(0,0,0)
 			bullet.TracerName = "lvs_laser_red_aat"
 			bullet.Force	= 10
-			bullet.HullSize 	= 5
+			bullet.HullSize 	= 1
 			bullet.Damage	= 200
 			bullet.SplashDamage = 300
 			bullet.SplashDamageRadius = 250
-			bullet.Velocity = 12000
+			bullet.Velocity = 10000
 			bullet.Attacker 	= ent:GetDriver()
 			bullet.Callback = function(att, tr, dmginfo)
 				local effectdata = EffectData()

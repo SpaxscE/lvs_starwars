@@ -10,6 +10,33 @@ function ENT:ContraptionThink()
 	self:CheckUpRight()
 	self:CheckActive()
 	self:CheckMotion( OnMoveableFloor )
+	self:UpdateLegs()
+end
+
+function ENT:UpdateLegs()
+	local T = CurTime()
+
+	local PhysObj = self:GetPhysicsObject()
+
+	local Delay = math.max(1.5 - math.max( self:GetVelocity():Length() / 150, math.abs( PhysObj:GetAngleVelocity().z / 30) ) ,0.35)
+
+	if ((self._NextLeg or 0) + Delay ) > T then return end
+
+	if not self:GetIsMoving() then return end
+
+	self._NextLeg = T
+
+	local Next = self:GetUpdateLeg() + (self:GetTargetSpeed() >= 0 and 1 or -1)
+
+	if Next > 4 then
+		Next = 1
+	end
+
+	if Next < 1 then
+		Next = 4
+	end
+
+	self:SetUpdateLeg( Next )
 end
 
 function ENT:CheckUpRight()
@@ -80,11 +107,6 @@ function ENT:CheckMotion( OnMoveableFloor )
 	end
 end
 
-function ENT:HitGround()
-	return self._HitGround == true
-end
-
-
 function ENT:CheckGround()
 
 	local phys = self:GetPhysicsObject()
@@ -107,7 +129,9 @@ function ENT:CheckGround()
 		end,
 	} )
 
-	self._HitGround = trace.Hit
+	if self:GetNWGround() ~= trace.Hit then
+		self:SetNWGround( trace.Hit )
+	end
 
 	if IsValid( trace.Entity ) then
 		return self.CanMoveOn[ trace.Entity:GetClass() ] == true

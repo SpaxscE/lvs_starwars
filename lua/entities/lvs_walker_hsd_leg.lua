@@ -50,6 +50,13 @@ else
 		["RR"] = 270,
 	}
 
+	local LocToID = {
+		[1] = "FL",
+		[2] = "FR",
+		[3] = "RL",
+		[4] = "RR",
+	}
+
 	function ENT:Think()
 		local Base = self:GetBase()
 
@@ -63,11 +70,19 @@ else
 
 		local LocIndex = self:GetLocationIndex()
 
+		if not Base:HitGround() then
+			local Pos = Base:LocalToWorld( StartPositions[ LocIndex ] )
+
+			self:RunIK( Pos, Base )
+			self._OldPos = Pos
+			self._smPos = Pos
+
+			return
+		end
+
 		local Up = Base:GetUp()
 		local Forward = Base:GetForward()
 		local Vel = Base:GetVelocity()
-
-		local IsMoving = Base:GetIsMoving()
 
 		local TraceStart = Base:LocalToWorld( StartPositions[ LocIndex ] ) + Vel
 
@@ -81,9 +96,7 @@ else
 			end,
 		} )
 
-		local Move = Base:GetMove()
-
-		local UpdateLeg = math.cos( math.rad( Move + Cycl[ LocIndex ] ) ) > 0.9
+		local UpdateLeg = LocToID[ Base:GetUpdateLeg() ] == LocIndex
 
 		self._OldPos = self._OldPos or trace.HitPos
 		self._smPos = self._smPos or self._OldPos

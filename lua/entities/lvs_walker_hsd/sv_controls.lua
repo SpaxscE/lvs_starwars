@@ -54,33 +54,44 @@ function ENT:StartCommand( ply, cmd )
 	self:CalcSteer( ply, cmd )
 end
 
+local MoveX = {
+	[1] = 1,
+	[2] = 1,
+	[3] = -1,
+	[4] = -1,
+}
+
+local MoveY = {
+	[1] = -1,
+	[2] = 1,
+	[3] = -1,
+	[4] = 1,
+}
+
 function ENT:GetAlignment( ent, phys )
-	local Move = self:GetMove()
+	local Rate = FrameTime() * 2
 
-	local P = math.cos( math.rad(Move) )
-	local R = -math.cos( math.rad(Move * 2) )
+	self._smBodyMoveX = self._smBodyMoveX or 0
+	self._smBodyMoveY = self._smBodyMoveY or 0
 
-	local Pitch = math.abs( P ) ^ 10 * self:Sign( P ) * 2
-	local Roll = math.abs( R ) ^ 10 * self:Sign( R ) * 2
+	local UpdateLeg = self:GetUpdateLeg()
+
+	if self._oldUpdateLeg ~= UpdateLeg then
+		self._oldUpdateLeg = UpdateLeg
+
+		self._smBodyMoveX = MoveX[ UpdateLeg ]
+		self._smBodyMoveY = MoveY[ UpdateLeg ]
+	end
+
+	self._smBodyMoveX = self._smBodyMoveX - math.Clamp( self._smBodyMoveX, -Rate, Rate )
+	self._smBodyMoveY = self._smBodyMoveY - math.Clamp( self._smBodyMoveY, -Rate, Rate )
+
+	local Pitch = self._smBodyMoveX
+	local Roll =  2 * self._smBodyMoveY
+
 	local Ang = self:LocalToWorldAngles( Angle(Pitch,0,Roll) )
 
 	return Ang:Forward(), Ang:Right()
-end
-
-function ENT:CalcMove( speed )
-	local PhysObj = self:GetPhysicsObject()
-
-	self:SetMove( self:GetMove() + speed * (0.015 + math.abs( PhysObj:GetAngleVelocity().z * 0.000125 )) )
-
-	local Move = self:GetMove()
-
-	if Move > 360 then
-		self:SetMove( Move - 360 )
-	end
-
-	if Move < -360 then
-		self:SetMove( Move + 360 )
-	end
 end
 
 function ENT:GetMoveXY( ent, phys, deltatime )
@@ -88,8 +99,6 @@ function ENT:GetMoveXY( ent, phys, deltatime )
 
 	local X = (self:GetTargetSpeed() - VelL.x)
 	local Y = -VelL.y * 0.6
-
-	self:CalcMove( VelL.x )
 
 	return X, Y
 end

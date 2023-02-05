@@ -43,9 +43,10 @@ ENT.CanMoveOn = {
 ENT.lvsShowInSpawner = true
 
 function ENT:OnSetupDataTables()
-	self:AddDT( "Float", "Move" )
-	self:AddDT( "Bool", "IsMoving" )
+	self:AddDT( "Int", "UpdateLeg" )
 	self:AddDT( "Bool", "IsRagdoll" )
+	self:AddDT( "Bool", "IsMoving" )
+	self:AddDT( "Bool", "NWGround" )
 	self:AddDT( "Vector", "AIAimVector" )
 end
 
@@ -97,4 +98,8 @@ function ENT:GetAimAngles()
 end
 
 function ENT:InitWeapons()
+end
+
+function ENT:HitGround()
+	return self:GetNWGround()
 end

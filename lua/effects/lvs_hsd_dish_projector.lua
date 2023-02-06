@@ -42,8 +42,8 @@ function EFFECT:Render()
 	self:SetRenderBoundsWS( StartPos, EndPos )
 
 	render.SetMaterial( self.Mat )
-	render.DrawBeam( StartPos, EndPos, (8 + math.random(0,3)) * Mul, 1, 0, Color(255,0,0,255) )
-	render.DrawBeam( StartPos, EndPos, (2 + math.random(0,2)) * Mul, 1, 0, Color(255,255,255,255) )
+	render.DrawBeam( StartPos, EndPos, (16 + math.random(0,3)) * Mul, 1, 0, Color(255,0,0,255) )
+	render.DrawBeam( StartPos, EndPos, (4 + math.random(0,2)) * Mul, 1, 0, Color(255,255,255,255) )
 
 	render.SetMaterial( self.HitMat )
 	local A = 150 + math.random(0,20)

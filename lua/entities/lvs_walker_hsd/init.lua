@@ -66,7 +66,7 @@ function ENT:OnSpawn( PObj )
 		mins = Vector(-75,-75,-85),
 		maxs =  Vector(75,75,60),
 		Callback = function( tbl, ent, dmginfo )
-			if ent:GetHP() > 500 or self:GetIsRagdoll() then return end
+			if ent:GetHP() > 1500 or self:GetIsRagdoll() then return end
 
 			local effectdata = EffectData()
 				effectdata:SetOrigin( ent:LocalToWorld( Vector(0,0,250) ) )
@@ -94,7 +94,7 @@ function ENT:OnSpawn( PObj )
 
 			dmginfo:ScaleDamage( 2 )
 
-			if ent:GetHP() > 1000 or self:GetIsRagdoll() then return end
+			if ent:GetHP() > 1500 or self:GetIsRagdoll() then return end
 
 			ent:BecomeRagdoll()
 

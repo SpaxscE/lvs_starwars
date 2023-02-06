@@ -41,25 +41,56 @@ function ENT:TraceProjectorBeam()
 	return trace
 end
 
+function ENT:StopProjector()
+	if not self:GetProjectorBeam() then return end
+
+	self:SetProjectorBeam( false )
+
+	self.SNDProjector:Stop()
+end
+
+function ENT:StartProjector()
+	if not IsValid( self.SNDProjector ) then return end
+
+	if self:GetProjectorBeam() then return end
+
+	self:SetProjectorBeam( true )
+
+	self.SNDProjector:Play()
+end
+
 function ENT:InitWeapons()
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/laserbeam.png")
 	weapon.Ammo = -1
-	weapon.Delay = 0
+	weapon.Delay = 2
 	weapon.HeatRateUp = 0
-	weapon.HeatRateDown = 0
+	weapon.HeatRateDown = 0.5
 	weapon.OnThink = function( ent, active )
 		ent:AimTurretPrimary()
+
+		if not ent:GetProjectorBeam() then return end
+
+		local trace = ent:TraceProjectorBeam()
+
+		ent:ProjectorBeamDamage( trace.Entity, ent:GetDriver(), trace.HitPos, (trace.HitPos - ent:GetPos()):GetNormalized() )
+
+		if not active then return end
+
+		ent:SetHeat( ent:GetHeat() + FrameTime() * 10 )
 	end
 	weapon.Attack = function( ent )
-		local trace = ent:TraceProjectorBeam()
-		ent:ProjectorBeamDamage( trace.Entity, ent:GetDriver(), trace.HitPos, (trace.HitPos - ent:GetPos()):GetNormalized() )
-	end
-	weapon.StartAttack = function( ent )
-		ent:SetProjectorBeam( true )
-	end
-	weapon.FinishAttack = function( ent )
-		ent:SetProjectorBeam( false )
+		if ent:GetProjectorBeam() then return true end
+
+		if not ent:WeaponsInRange() then return true end
+
+		ent:StartProjector()
+
+		timer.Simple( 1.25, function()
+			if not IsValid( ent ) then return end
+
+			ent:StopProjector()
+		end )
 	end
 	self:AddWeapon( weapon )
 

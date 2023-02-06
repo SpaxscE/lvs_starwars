@@ -144,6 +144,12 @@ function ENT:OnSpawn( PObj )
 		end
 	} )
 
+	local ID = self:LookupAttachment( "muzzle_primary" )
+	local Muzzle = self:GetAttachment( ID )
+	self.SNDProjector = self:AddSoundEmitter( self:WorldToLocal( Muzzle.Pos ), "lvs/vehicles/hsd/fire_projector.mp3", "lvs/vehicles/hsd/fire_projector.mp3" )
+	self.SNDProjector:SetSoundLevel( 95 )
+	self.SNDProjector:SetParent( self, ID )
+
 	local ID = self:LookupAttachment( "muzzle_secondary" )
 	local Muzzle = self:GetAttachment( ID )
 	self.SNDTurret = self:AddSoundEmitter( self:WorldToLocal( Muzzle.Pos ), "lvs/vehicles/hsd/fire.mp3", "lvs/vehicles/hsd/fire.mp3" )

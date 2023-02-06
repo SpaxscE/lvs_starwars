@@ -13,6 +13,8 @@ function EFFECT:Init( data )
 			self:SetRenderBoundsWS( self.Entity:GetPos(), -Muzzle.Ang:Right() * 50000 )
 		end
 	end
+
+	self.SpawnTime = CurTime()
 end
 
 function EFFECT:Think()
@@ -23,56 +25,97 @@ function EFFECT:Think()
 	return true
 end
 
-
 function EFFECT:Render()
 	if not self.ID or not IsValid( self.Entity ) then return end
+
+	local T = CurTime()
+
+	local Mul = math.min( math.max( 1.5 - (T - self.SpawnTime), 0 ) ^ 2, 1 )
 
 	local Muzzle = self.Entity:GetAttachment( self.ID )
 
 	local Dir = -Muzzle.Ang:Right()
-	local StartPos = Muzzle.Pos + Dir * 14
+	local StartPos = Muzzle.Pos
 	local Trace = util.TraceLine( { start = StartPos, endpos = StartPos + Dir * 50000, filter = self } )
 	local EndPos = Trace.HitPos
 
 	self:SetRenderBoundsWS( StartPos, EndPos )
 
 	render.SetMaterial( self.Mat )
-	render.DrawBeam( StartPos, EndPos, 14 + math.random(0,4), 1, 0, Color(255,0,0,255) )
-	render.DrawBeam( StartPos, EndPos, 3 + math.random(0,4), 1, 0, Color(255,255,255,255) )
+	render.DrawBeam( StartPos, EndPos, (8 + math.random(0,3)) * Mul, 1, 0, Color(255,0,0,255) )
+	render.DrawBeam( StartPos, EndPos, (2 + math.random(0,2)) * Mul, 1, 0, Color(255,255,255,255) )
 
 	render.SetMaterial( self.HitMat )
 	local A = 150 + math.random(0,20)
 	local B = 70 + math.random(0,20)
-	render.DrawSprite( StartPos, A, A, Color(255,0,0,255) )
-	render.DrawSprite( StartPos, B, B, Color(255,255,255,255) )
+	render.DrawSprite( StartPos, A * Mul, A * Mul, Color(255,0,0,255) )
+	render.DrawSprite( StartPos, B * Mul, B * Mul, Color(255,255,255,255) )
 
 	render.DrawSprite( EndPos, A, A, Color(255,0,0,255) )
 	render.DrawSprite( EndPos + VectorRand() * 10, B, B, Color(255,255,255,255) )
 
-	if math.random(0,5) == 1 then
-		local emitter = ParticleEmitter( EndPos, false )
-		local dir = (self.Entity:GetPos() - EndPos):GetNormalized()
-		
-		for i = 0, 10 do
-			local particle = emitter:Add( "sprites/rico1", EndPos )
-			
-			local vel = VectorRand()  * 100 + dir * 40
-			
-			if not particle then continue end
+	if (self._Next or 0) > T then return end
 
-			particle:SetVelocity( vel )
-			particle:SetAngles( vel:Angle() + Angle(0,90,0) )
-			particle:SetDieTime( math.Rand(0.1,0.3) * 0.5 )
-			particle:SetStartAlpha( math.Rand( 200, 255 ) )
-			particle:SetEndAlpha( 0 )
-			particle:SetStartSize( math.Rand(1,30) )
-			particle:SetEndSize( 0 )
-			particle:SetRoll( math.Rand(-100,100) )
-			particle:SetRollDelta( math.Rand(-100,100) )
+	self._Next = T + 0.02
 
-			particle:SetAirResistance( 0 )
-		end
-		
-		emitter:Finish()
+	local emitter = ParticleEmitter( EndPos, false )
+
+	if not emitter or not IsValid( emitter ) then return end
+
+	local dir = (self.Entity:GetPos() - EndPos):GetNormalized()
+	
+	for i = 0, 3 do
+		local particle = emitter:Add( "sprites/light_glow02_add", EndPos )
+
+		local vel = VectorRand() * 250 + Trace.HitNormal
+
+		if not particle then continue end
+
+		particle:SetVelocity( vel )
+		particle:SetAngles( vel:Angle() + Angle(0,90,0) )
+		particle:SetDieTime( math.Rand(0.2,0.4) )
+		particle:SetStartAlpha( 255 )
+		particle:SetEndAlpha( 0 )
+		particle:SetStartSize( math.Rand(12,24) )
+		particle:SetEndSize( 0 )
+		particle:SetRoll( math.Rand(-100,100) )
+		particle:SetRollDelta( math.Rand(-100,100) )
+		particle:SetColor( 255, 0, 0 )
+		particle:SetGravity( Vector(0,0,-600) )
+
+		particle:SetAirResistance( 0 )
+
+		particle:SetCollide( true )
+		particle:SetBounce( 1 )
 	end
+
+	local Dist = (StartPos - EndPos):Length()
+
+	local invMul = (1 - Mul)
+
+	for i = 0, Dist, 25 do
+		local Pos = StartPos + Dir * i
+
+		local particle = emitter:Add( "sprites/rico1", Pos )
+		
+		local vel = VectorRand()  * 150
+		
+		if not particle then continue end
+
+		particle:SetVelocity( vel + vel * invMul )
+		particle:SetDieTime( 0.1 + 0.15 * invMul )
+		particle:SetStartAlpha( 255 )
+		particle:SetEndAlpha( 0 )
+		particle:SetStartSize( math.Rand( 1, 5 ) + invMul * 2 )
+		particle:SetEndSize( 0 )
+		particle:SetColor( 50 + 205 * Mul, 0, 0 )
+		particle:SetAirResistance( 0 )
+		particle:SetRoll( math.Rand(-10,10) )
+		particle:SetRollDelta( math.Rand(-10,10) )
+		particle:SetGravity( Vector(0,0,-600 * invMul) )
+
+		particle:SetAirResistance( 0 )
+	end
+
+	emitter:Finish()
 end

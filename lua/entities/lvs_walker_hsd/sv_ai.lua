@@ -45,7 +45,29 @@ function ENT:RunAI()
 			TargetPos = Target:LocalToWorld( Target:OBBCenter() )
 
 			if self:AITargetInFront( Target, 65 ) then
+				local CurHeat = self:GetNWHeat()
+				local CurWeapon = self:GetSelectedWeapon()
+
+				if CurWeapon > 2 then
+					self:AISelectWeapon( 1 )
+				else
+					if CurHeat > 0.9 then
+						if CurWeapon == 1 and self:AIHasWeapon( 2 ) then
+							self:AISelectWeapon( 2 )
+
+						elseif CurWeapon == 2 then
+							self:AISelectWeapon( 1 )
+						end
+					else
+						if CurHeat == 0 and math.cos( CurTime() ) > 0 then
+							self:AISelectWeapon( 1 )
+						end
+					end
+				end
+
 				self._AIFireInput = true
+			else
+				self:AISelectWeapon( 1 )
 			end
 
 			self:SetTargetSteer( Dir )
@@ -84,4 +106,16 @@ function ENT:GetHardLockTarget()
 	if (self._HardLockTime or 0) < CurTime() then return NULL end
 
 	return self._HardLockTarget
+end
+
+function ENT:AISelectWeapon( ID )
+	if ID == self:GetSelectedWeapon() then return end
+
+	local T = CurTime()
+
+	if (self._nextAISwitchWeapon or 0) > T then return end
+
+	self._nextAISwitchWeapon = T + math.random(3,6)
+
+	self:SelectWeapon( ID )
 end

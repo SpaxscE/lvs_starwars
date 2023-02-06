@@ -23,7 +23,7 @@ function EFFECT:Init( data )
 end
 
 function EFFECT:Think()
-	if self.DieTime < CurTime() or not IsValid( self.Ent ) then 
+	if (self.DieTime or 0) < CurTime() or not IsValid( self.Ent ) then 
 		if IsValid( self.Emitter ) then
 			self.Emitter:Finish()
 		end

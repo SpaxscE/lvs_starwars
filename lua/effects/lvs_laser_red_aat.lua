@@ -26,7 +26,7 @@ function EFFECT:Render()
 	local len = 100 * bullet:GetLength()
 
 	render.SetMaterial( self.MatSprite ) 
-	render.DrawSprite( endpos, 600, 600, Color( 255, 0, 0, 255 ) )
+	render.DrawBeam( endpos - dir * len * 8, endpos + dir * len * 8, 200, 1, 0, Color( 255, 0, 0, 255 ) )
 
 	render.SetMaterial( self.MatBeam )
 	render.DrawBeam( endpos - dir * len, endpos + dir * len, 60, 1, 0, Color( 255, 0, 0, 255 ) )

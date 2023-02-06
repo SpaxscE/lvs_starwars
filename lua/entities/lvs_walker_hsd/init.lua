@@ -1,6 +1,7 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "cl_camera.lua" )
+AddCSLuaFile( "cl_prediction.lua" )
 AddCSLuaFile( "sh_weapons.lua" )
 include("shared.lua")
 include("sv_contraption.lua")
@@ -166,4 +167,23 @@ function ENT:AlignView( ply, SetZero )
 
 		ply:SetEyeAngles( Angle(0,90,0) )
 	end)
+end
+
+function ENT:ProjectorBeamDamage( target, attacker, HitPos, HitDir )
+	if not IsValid( target ) then return end
+
+	if not IsValid( attacker ) then
+		attacker = self
+	end
+
+	if target ~= self then
+		local dmginfo = DamageInfo()
+		dmginfo:SetDamage( 1000 * FrameTime() )
+		dmginfo:SetAttacker( attacker )
+		dmginfo:SetDamageType( DMG_SHOCK + DMG_ENERGYBEAM + DMG_AIRBOAT )
+		dmginfo:SetInflictor( self ) 
+		dmginfo:SetDamagePosition( HitPos ) 
+		dmginfo:SetDamageForce( HitDir * 10000 ) 
+		target:TakeDamageInfo( dmginfo )
+	end
 end

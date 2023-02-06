@@ -3,7 +3,7 @@ ENT.Base = "lvs_walker_atte_hoverscript"
 
 ENT.PrintName = "Homing Spider Droid"
 ENT.Author = "Luna"
-ENT.Information = ""
+ENT.Information = "OG-9 Separatist Walker Droid"
 ENT.Category = "[LVS] - Star Wars"
 
 ENT.Spawnable		= true
@@ -47,6 +47,7 @@ function ENT:OnSetupDataTables()
 	self:AddDT( "Bool", "IsRagdoll" )
 	self:AddDT( "Bool", "IsMoving" )
 	self:AddDT( "Bool", "NWGround" )
+	self:AddDT( "Bool", "ProjectorBeam" )
 	self:AddDT( "Vector", "AIAimVector" )
 end
 

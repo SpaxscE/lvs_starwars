@@ -8,6 +8,15 @@ function ENT:AimTurretSecondary()
 	self:SetPoseParameter("turret_secondary_yaw", AimAngles.y )
 end
 
+function ENT:AimTurretPrimary()
+	local trace = self:GetEyeTrace()
+
+	local AimAngles = self:WorldToLocalAngles( (trace.HitPos - self:LocalToWorld( Vector(0,0,342)) ):GetNormalized():Angle() )
+
+	self:SetPoseParameter("turret_primary_pitch", -AimAngles.p )
+	self:SetPoseParameter("turret_primary_yaw", AimAngles.y )
+end
+
 function ENT:WeaponsInRange()
 	local Forward = self:GetForward()
 	local AimForward = self:GetAimVector()
@@ -15,7 +24,46 @@ function ENT:WeaponsInRange()
 	return self:AngleBetweenNormal( Forward, AimForward ) < 45
 end
 
+function ENT:TraceProjectorBeam()
+	local ID = self:LookupAttachment( "muzzle_primary" )
+	local Muzzle = self:GetAttachment( ID )
+
+	if not Muzzle then return end
+
+	local dir = -Muzzle.Ang:Right()
+	local pos = Muzzle.Pos
+
+	local trace = util.TraceLine( {
+		start = pos,
+		endpos = (pos + dir * 50000),
+	} )
+
+	return trace
+end
+
 function ENT:InitWeapons()
+	local weapon = {}
+	weapon.Icon = Material("lvs/weapons/laserbeam.png")
+	weapon.Ammo = -1
+	weapon.Delay = 0
+	weapon.HeatRateUp = 0
+	weapon.HeatRateDown = 0
+	weapon.OnThink = function( ent, active )
+		ent:AimTurretPrimary()
+	end
+	weapon.Attack = function( ent )
+		local trace = ent:TraceProjectorBeam()
+		ent:ProjectorBeamDamage( trace.Entity, ent:GetDriver(), trace.HitPos, (trace.HitPos - ent:GetPos()):GetNormalized() )
+	end
+	weapon.StartAttack = function( ent )
+		ent:SetProjectorBeam( true )
+	end
+	weapon.FinishAttack = function( ent )
+		ent:SetProjectorBeam( false )
+	end
+	self:AddWeapon( weapon )
+
+
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/hmg.png")
 	weapon.Ammo = 100

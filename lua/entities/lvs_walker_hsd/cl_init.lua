@@ -1,9 +1,26 @@
 include("shared.lua")
 include("cl_camera.lua")
+include("cl_prediction.lua")
 include("sh_weapons.lua")
 
 function ENT:OnFrame()
+	self:PredictPoseParamaters()
+	self:ProjectorBeam()
 	self:DamageFX()
+end
+
+function ENT:ProjectorBeam()
+	local ProjectorBeam = self:GetProjectorBeam()
+
+	if ProjectorBeam == self.OldProjectorBeam then return end
+
+	self.OldProjectorBeam = ProjectorBeam
+
+	if not ProjectorBeam then return end
+
+	local effectdata = EffectData()
+	effectdata:SetEntity( self )
+	util.Effect( "lvs_hsd_dish_projector", effectdata )
 end
 	
 function ENT:DamageFX()

@@ -70,7 +70,7 @@ function EFFECT:Explosion( pos )
 	end
 
 	for i = 0, 20 do
-		local particle = emitter:Add( "sprites/flamelet"..math.random(1,5), pos )
+		local particle = emitter:Add( "effects/lvs_base/flamelet"..math.random(1,5), pos )
 		
 		if not particle then continue end
 

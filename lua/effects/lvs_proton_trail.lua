@@ -18,7 +18,7 @@ function EFFECT:doFX( pos )
 	if IsValid( self.Emitter ) then
 		local emitter = self.Emitter
 
-		local particle = emitter:Add( "particles/flamelet"..math.random(1,5), pos )
+		local particle = emitter:Add( "effects/lvs_base/flamelet"..math.random(1,5), pos )
 		if particle then
 			particle:SetVelocity( -self.Entity:GetForward() * math.Rand(250,800) + self.Entity:GetVelocity())
 			particle:SetDieTime( 1 )
@@ -32,7 +32,7 @@ function EFFECT:doFX( pos )
 			particle:SetCollide( false )
 		end
 		
-		local particle = emitter:Add( "particles/flamelet"..math.random(1,5), self.Entity:GetPos() )
+		local particle = emitter:Add( "effects/lvs_base/flamelet"..math.random(1,5), self.Entity:GetPos() )
 		if particle then
 			particle:SetVelocity( -self.Entity:GetForward() * 200 + VectorRand() * 50 )
 			particle:SetDieTime( 1 )

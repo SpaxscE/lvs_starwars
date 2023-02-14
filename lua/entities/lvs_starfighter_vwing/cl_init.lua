@@ -9,7 +9,7 @@ ENT.EnginePos = {
 }
 
 function ENT:CalcViewOverride( ply, pos, angles, fov, pod )
-	if self:GetDriver() == ply then
+	if self:GetDriver() == ply and not pod:GetThirdPersonMode() then
 		local newpos = pos + self:GetForward() * 37 + self:GetUp() * 8
 
 		return newpos, angles, fov

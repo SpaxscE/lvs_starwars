@@ -18,7 +18,7 @@ function ENT:CalcViewDriver( ply, pos, angles, fov, pod )
 	clamped_angles = pod:LocalToWorldAngles( clamped_angles )
 
 	local StartPos = self:LocalToWorld( self:OBBCenter() ) + clamped_angles:Up() * 100
-	local EndPos = StartPos - clamped_angles:Forward() * radius + clamped_angles:Up() * radius * 0.2
+	local EndPos = StartPos - clamped_angles:Forward() * radius + clamped_angles:Up() * (radius * 0.2 + radius * pod:GetCameraHeight())
 
 	local WallOffset = 4
 

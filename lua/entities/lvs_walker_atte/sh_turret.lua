@@ -126,7 +126,7 @@ function ENT:InitTurret()
 		clamped_angles = pod:LocalToWorldAngles( clamped_angles )
 
 		local StartPos = self:LocalToWorld( Vector(95,0,280) )
-		local EndPos = StartPos - clamped_angles:Forward() * radius + clamped_angles:Up() * radius * 0.2
+		local EndPos = StartPos - clamped_angles:Forward() * radius + clamped_angles:Up() * (radius * 0.2 + radius * pod:GetCameraHeight())
 
 		local WallOffset = 4
 

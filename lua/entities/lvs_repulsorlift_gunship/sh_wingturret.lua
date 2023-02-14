@@ -198,7 +198,7 @@ function ENT:InitWeaponGunner()
 		clamped_angles.p = math.max( clamped_angles.p, -20 )
 		clamped_angles = pod:LocalToWorldAngles( clamped_angles )
 
-		local StartPos = base:LocalToWorld( base:OBBCenter() ) + clamped_angles :Up() * 250
+		local StartPos = base:LocalToWorld( base:OBBCenter() ) + clamped_angles :Up() * (250 + radius * pod:GetCameraHeight())
 		local EndPos = StartPos - clamped_angles:Forward() * radius
 
 		local WallOffset = 4

@@ -18,7 +18,7 @@ function ENT:CalcViewDriver( ply, pos, angles, fov, pod )
 	clamped_angles = pod:LocalToWorldAngles( clamped_angles )
 
 	local StartPos = self:LocalToWorld( self:OBBCenter() ) + clamped_angles:Up() * 100
-	local EndPos = StartPos - clamped_angles:Forward() * radius + clamped_angles:Up() * radius * 0.2
+	local EndPos = StartPos - clamped_angles:Forward() * radius + clamped_angles:Up() * (radius * 0.2 + radius * pod:GetCameraHeight())
 
 	local WallOffset = 4
 
@@ -62,7 +62,7 @@ function ENT:LVSCalcView( ply, pos, angles, fov, pod )
 	local radius = ( mn - mx ):Length()
 	local radius = radius + radius * pod:GetCameraDistance()
 
-	local TargetOrigin = view.origin + ( view.angles:Forward() * -radius )
+	local TargetOrigin = view.origin + ( view.angles:Forward() * -radius ) + view.angles:Up() * (80 + radius * pod:GetCameraHeight())
 	local WallOffset = 4
 
 	local tr = util.TraceHull( {

@@ -17,7 +17,6 @@ function ENT:OnSpawn( PObj )
 	PObj:SetMass( 5000 )
 
 	local DriverSeat = self:AddDriverSeat( Vector(50,0,265), Angle(0,-90,0) )
-	DriverSeat:SetCameraDistance( 0.75 )
 	DriverSeat.HidePlayer = true
 
 	local Legs = {

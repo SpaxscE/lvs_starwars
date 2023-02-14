@@ -219,7 +219,7 @@ function ENT:InitWeapons()
 		local radius = 800
 		radius = radius + radius * pod:GetCameraDistance()
 
-		local StartPos = pod:LocalToWorld( pod:OBBCenter() ) + angles :Up() * 250
+		local StartPos = pod:LocalToWorld( pod:OBBCenter() ) + angles :Up() * (250 + radius * pod:GetCameraHeight())
 		local EndPos = StartPos - angles:Forward() * radius
 
 		local WallOffset = 4

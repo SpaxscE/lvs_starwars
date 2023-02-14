@@ -51,13 +51,13 @@ function ENT:CalcViewDirectInput( ply, pos, angles, fov, pod )
 		local SideForce = math.Clamp(velL.y / 10,-250,250)
 		local UpForce = math.Clamp(velL.z / 10,-250,250)
 
-		pod._lerpPosL = pod._lerpPosL and (pod._lerpPosL + (Vector(radius, SideForce,150 + radius * 0.1 + UpForce) - pod._lerpPosL) * RealFrameTime() * 12) or Vector(0,0,0)
+		pod._lerpPosL = pod._lerpPosL and (pod._lerpPosL + (Vector(radius, SideForce,150 + radius * 0.1 + radius * pod:GetCameraHeight() + UpForce) - pod._lerpPosL) * RealFrameTime() * 12) or Vector(0,0,0)
 		pod._lerpPos = self:LocalToWorld( pod._lerpPosL )
 
 		view.origin = pod._lerpPos
 		view.angles = self:LocalToWorldAngles( Angle(0,180,0) )
 	else
-		local TargetPos = self:LocalToWorld( Vector(500,0,150 + radius * 0.1) )
+		local TargetPos = self:LocalToWorld( Vector(500,0,150 + radius * 0.1 + radius * pod:GetCameraHeight()) )
 
 		local Sub = TargetPos - pod._lerpPos
 		local Dir = Sub:GetNormalized()
@@ -106,7 +106,7 @@ function ENT:CalcViewMouseAim( ply, pos, angles, fov, pod )
 	local radius = 550
 	radius = radius + radius * pod:GetCameraDistance()
 
-	local TargetOrigin = view.origin - view.angles:Forward() * radius  + view.angles:Up() * radius * 0.2
+	local TargetOrigin = view.origin - view.angles:Forward() * radius  + view.angles:Up() * (radius * 0.2 + radius * pod:GetCameraHeight())
 	local WallOffset = 4
 
 	local tr = util.TraceHull( {

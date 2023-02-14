@@ -20,7 +20,7 @@ function ENT:CalcViewDriver( ply, pos, angles, fov, pod )
 	local radius = 550
 	radius = radius + radius * pod:GetCameraDistance()
 
-	local TargetOrigin = view.origin - view.angles:Forward() * radius  + view.angles:Up() * radius * 0.2
+	local TargetOrigin = view.origin - view.angles:Forward() * radius  + view.angles:Up() * (radius * 0.2 + radius * pod:GetCameraHeight())
 	local WallOffset = 4
 
 	local tr = util.TraceHull( {

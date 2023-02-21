@@ -50,6 +50,8 @@ function ENT:PlayerDirectInput( ply, cmd )
 	local KeyRight = ply:lvsKeyDown( "+ROLL_SF" )
 	local KeyPitchUp = ply:lvsKeyDown( "+PITCH_SF" )
 	local KeyPitchDown = ply:lvsKeyDown( "-PITCH_SF" )
+	local KeyRollRight = ply:lvsKeyDown( "+YAW_SF" )
+	local KeyRollLeft = ply:lvsKeyDown( "-YAW_SF" )
 
 	local MouseX = cmd:GetMouseX()
 	local MouseY = cmd:GetMouseY()
@@ -65,6 +67,11 @@ function ENT:PlayerDirectInput( ply, cmd )
 
 	if KeyPitchDown then MouseY = (10 / SensY) * ReturnDelta end
 	if KeyPitchUp then MouseY = -(10 / SensY) * ReturnDelta end
+	if KeyRollRight or KeyRollLeft then
+		local NewX = (KeyRollRight and 10 or 0) - (KeyRollLeft and 10 or 0)
+
+		MouseX = (NewX / SensX) * ReturnDelta
+	end
 
 	local Input = Vector( MouseX * 0.4 * SensX, MouseY * SensY, 0 )
 

@@ -145,7 +145,7 @@ function ENT:OnEngineActiveChanged( Active )
 		sound:SetSoundLevel( data.SoundLevel )
 		sound:PlayEx(0,100)
 
-		if data.sound_int and data.sound_int ~= data.sound then
+		if data.sound_int and data.sound_int ~= data.sound and LocalPlayer():lvsGetVehicle() == self:GetBase() then
 			if data.sound_int == "" then
 				self._ActiveSounds[ id ] = {
 					ext = sound,

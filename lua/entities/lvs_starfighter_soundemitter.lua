@@ -131,7 +131,8 @@ end
 function ENT:OnEngineActiveChanged( Active )
 	if not Active then self:StopSounds() end
 
-	local DrivingMe = LocalPlayer():lvsGetVehicle() == self:GetBase()
+	local ply = LocalPlayer()
+	local DrivingMe = ply:lvsGetVehicle() == self:GetBase() or table.Count( LVS:GetVehicles() ) <= 1
 
 	for id, data in pairs( self.EngineSounds ) do
 		if not isstring( data.sound ) then continue end

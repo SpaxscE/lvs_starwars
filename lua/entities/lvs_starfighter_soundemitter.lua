@@ -132,7 +132,7 @@ function ENT:OnEngineActiveChanged( Active )
 	if not Active then self:StopSounds() end
 
 	local ply = LocalPlayer()
-	local DrivingMe = ply:lvsGetVehicle() == self:GetBase() or table.Count( LVS:GetVehicles() ) <= 1
+	local DrivingMe = ply:lvsGetVehicle() == self:GetBase()
 
 	for id, data in pairs( self.EngineSounds ) do
 		if not isstring( data.sound ) then continue end
@@ -168,13 +168,11 @@ function ENT:OnEngineActiveChanged( Active )
 				}
 			end
 		else
-			if DrivingMe or data.SoundLevel >= 90 then
-				local sound = CreateSound( self, data.sound )
-				sound:SetSoundLevel( data.SoundLevel )
-				sound:PlayEx(0,100)
+			local sound = CreateSound( self, data.sound )
+			sound:SetSoundLevel( data.SoundLevel )
+			sound:PlayEx(0,100)
 
-				self._ActiveSounds[ id ] = sound
-			end
+			self._ActiveSounds[ id ] = sound
 		end
 	end
 end

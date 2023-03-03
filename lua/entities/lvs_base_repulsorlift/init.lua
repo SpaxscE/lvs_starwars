@@ -31,6 +31,12 @@ function ENT:ApproachTargetAngle( TargetAngle, OverridePitch, OverrideYaw, Overr
 end
 
 function ENT:CalcAero( phys, deltatime )
+	if self:GetAI() then
+		if self._lvsAITargetAng then
+			self:ApproachTargetAngle( self._lvsAITargetAng )
+		end
+	end
+
 	local Steer = self:GetSteer()
 
 	local Forward = self:GetForward()

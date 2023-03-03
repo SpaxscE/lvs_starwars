@@ -7,6 +7,7 @@ AddCSLuaFile( "cl_flyby.lua" )
 AddCSLuaFile( "cl_deathsound.lua" )
 include("shared.lua")
 include("sv_ai.lua")
+include("sv_mouseaim.lua")
 include("sv_components.lua")
 include("sv_vehiclespecific.lua")
 include("sh_camera_eyetrace.lua")
@@ -86,6 +87,18 @@ function ENT:ApproachTargetAngle( TargetAngle, OverridePitch, OverrideYaw, Overr
 end
 
 function ENT:CalcAero( phys, deltatime )
+	-- mouse aim needs to run at high speed.
+	if self:GetAI() then
+		if self._lvsAITargetAng then
+			self:ApproachTargetAngle( self._lvsAITargetAng )
+		end
+	else
+		local ply = self:GetDriver()
+		if IsValid( ply ) and ply:lvsMouseAim() then
+			self:PlayerMouseAim( ply )
+		end
+	end
+
 	local Steer = self:GetSteer()
 
 	local Forward = self:GetForward()

@@ -155,9 +155,7 @@ function ENT:RunAI()
 
 	self.smTargetPos = self.smTargetPos and self.smTargetPos + (TargetPos - self.smTargetPos) * FrameTime() or self:GetPos()
 
-	local TargetAng = (self.smTargetPos - self:GetPos()):GetNormalized():Angle()
-
-	self:ApproachTargetAngle( TargetAng )
+	self._lvsAITargetAng = (self.smTargetPos - self:GetPos()):GetNormalized():Angle()
 end
 
 function ENT:AISelectWeapon( ID )

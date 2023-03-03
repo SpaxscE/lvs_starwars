@@ -91,3 +91,30 @@ function ENT:PlayerDirectInput( ply, cmd )
 
 	self:SetSteer( F )
 end
+
+function ENT:StartCommand( ply, cmd )
+	if self:GetDriver() ~= ply then return end
+
+	if SERVER then
+		local KeyJump = ply:lvsKeyDown( "VSPEC" )
+
+		if self._lvsOldKeyJump ~= KeyJump then
+			self._lvsOldKeyJump = KeyJump
+
+			if KeyJump then
+				self:ToggleVehicleSpecific()
+			end
+		end
+	end
+
+	if ply:lvsMouseAim() then
+		if SERVER then
+			self:PlayerMouseAim( ply, cmd )
+		end
+	else
+		self:PlayerDirectInput( ply, cmd )
+	end
+
+	self:CalcThrottle( ply, cmd )
+	self:CalcVtolThrottle( ply, cmd )
+end

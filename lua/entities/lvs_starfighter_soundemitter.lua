@@ -119,6 +119,7 @@ function ENT:HandleEngineSounds( vehicle )
 
 				if vehicle:HasActiveSoundEmitters() then
 					Volume = Volume * 0.25
+					fadespeed = fadespeed * 0.5
 				end
 
 				if sound.int then sound.int:ChangeVolume( Volume, fadespeed ) end

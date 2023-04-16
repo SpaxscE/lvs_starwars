@@ -18,7 +18,7 @@ function ENT:UpdateLegs()
 
 	local PhysObj = self:GetPhysicsObject()
 
-	local Delay = math.max(1.5 - math.max( self:GetVelocity():Length() / 150, math.abs( PhysObj:GetAngleVelocity().z / 30) ) ,0.35)
+	local Delay = math.max(1.5 - math.max( self:GetVelocity():Length() / 150, math.abs( PhysObj:GetAngleVelocity().z / 23) ) ,0.35)
 
 	if ((self._NextLeg or 0) + Delay ) > T then return end
 

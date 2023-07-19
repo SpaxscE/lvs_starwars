@@ -8,10 +8,10 @@ function ENT:ApproachTargetAngle( TargetAngle, OverridePitch, OverrideYaw, Overr
 
 	local Ang = self:GetAngles()
 
-	local AngY = self:WorldToLocalAngles( Angle( Ang.p, TargetAngle.y, Ang.r ) )
-	local AngP = self:WorldToLocalAngles( Angle( TargetAngle.p, Ang.y, Ang.r ) )
+	local AngY = self:WorldToLocalAngles( Angle(TargetAngle.p,TargetAngle.y,Ang.r ) )
+	local AngP = self:WorldToLocalAngles( Angle(TargetAngle.p,Ang.y,Ang.r ) )
 
-	local LocalAngPitch = math.Clamp( AngP.p * math.Clamp( math.abs( AngY.y ) / 0.9, 1, 10 ), -90, 90 )
+	local LocalAngPitch = AngP.p
 	local LocalAngYaw = AngY.y
 
 	local TargetForward = TargetAngle:Forward()
@@ -19,8 +19,8 @@ function ENT:ApproachTargetAngle( TargetAngle, OverridePitch, OverrideYaw, Overr
 
 	local AngVel = self:GetPhysicsObject():GetAngleVelocity()
 
-	local Pitch = math.Clamp( -LocalAngPitch / 10, -1, 1 ) + math.Clamp(AngVel.y / 10,-0.25,0.25) / math.abs( LocalAngPitch )
-	local Yaw = math.Clamp( -LocalAngYaw / 10,-1,1) + math.Clamp(AngVel.z / 10,-0.25,0.25) / math.abs( LocalAngYaw )
+	local Pitch = math.Clamp( -LocalAngPitch / 22 * math.Clamp( math.abs( AngY.y ) / 0.9,1,10), -1, 1 ) + math.Clamp(AngVel.y / 100,-0.25,0.25) / math.abs( LocalAngPitch )
+	local Yaw = math.Clamp( -LocalAngYaw / 22,-1,1) + math.Clamp(AngVel.z / 100,-0.25,0.25) / math.abs( LocalAngYaw )
 
 	if OverridePitch and OverridePitch ~= 0 then
 		Pitch = OverridePitch

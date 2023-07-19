@@ -6,18 +6,21 @@ function ENT:ApproachTargetAngle( TargetAngle, OverridePitch, OverrideYaw, Overr
 
 	if self:GetAI() then self:SetAIAimVector( self:WorldToLocalAngles( TargetAngle ):Forward() ) end
 
-	local Ang = self:WorldToLocalAngles( Angle( TargetAngle.p, TargetAngle.y, self:GetAngles().r ) )
+	local Ang = self:GetAngles()
 
-	local LocalAngPitch = Ang.p
-	local LocalAngYaw = Ang.y
+	local AngY = self:WorldToLocalAngles( Angle( Ang.p, TargetAngle.y, Ang.r ) )
+	local AngP = self:WorldToLocalAngles( Angle( TargetAngle.p, Ang.y, Ang.r ) )
+
+	local LocalAngPitch = math.Clamp( AngP.p * math.Clamp( math.abs( AngY.y ) / 0.9, 1, 10 ), -90, 90 )
+	local LocalAngYaw = AngY.y
 
 	local TargetForward = TargetAngle:Forward()
 	local Forward = self:GetForward()
 
 	local AngVel = self:GetPhysicsObject():GetAngleVelocity()
 
-	local Pitch = math.Clamp( -LocalAngPitch / 22 , -1, 1 ) + math.Clamp(AngVel.y / 100,-0.25,0.25) / math.abs( LocalAngPitch )
-	local Yaw = math.Clamp( -LocalAngYaw / 22 ,-1,1) + math.Clamp(AngVel.z / 100,-0.25,0.25) / math.abs( LocalAngYaw )
+	local Pitch = math.Clamp( -LocalAngPitch / 10, -1, 1 ) + math.Clamp(AngVel.y / 10,-0.25,0.25) / math.abs( LocalAngPitch )
+	local Yaw = math.Clamp( -LocalAngYaw / 10,-1,1) + math.Clamp(AngVel.z / 10,-0.25,0.25) / math.abs( LocalAngYaw )
 
 	if OverridePitch and OverridePitch ~= 0 then
 		Pitch = OverridePitch
@@ -90,7 +93,7 @@ function ENT:CalcAero( phys, deltatime )
 	local RollMul = (math.abs(self:AngleBetweenNormal( Vector(0,0,1) , self:GetForward() ) - 90) / 90) ^ 2
 	local TargetRoll = (Steer.x * math.min( self:GetThrottle() ^ 2, 1 ) - (VtolMove.y / self.ThrustVtol) * 0.25) * 45 * (1 - RollMul)
 
-	local Roll = math.Clamp( self:WorldToLocalAngles( Angle( 0, Ang.y, TargetRoll ) ).r / 90,-1,1) * self.TurnRateRoll * 12
+	local Roll = math.Clamp( self:WorldToLocalAngles( Angle( 0, Ang.y, TargetRoll ) ).r / 90,-1,1) * self.TurnRateRoll * 16
 
 	local VelL = self:WorldToLocal( self:GetPos() + Vel )
 

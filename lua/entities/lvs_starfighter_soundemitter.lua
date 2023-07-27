@@ -135,7 +135,7 @@ function ENT:HandleEngineSounds( vehicle )
 end
 
 function ENT:OnEngineActiveChanged( Active )
-	if not Active then self:StopSounds() end
+	if not Active then self:StopSounds() return end
 
 	local ply = LocalPlayer()
 	local DrivingMe = ply:lvsGetVehicle() == self:GetBase()

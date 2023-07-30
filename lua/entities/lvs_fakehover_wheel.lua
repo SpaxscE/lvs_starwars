@@ -5,7 +5,6 @@ ENT.Type            = "anim"
 ENT.Spawnable       = false
 ENT.AdminSpawnable  = false
 ENT.DoNotDuplicate = true
-ENT.lvsDoNotGrab = true
 
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
@@ -18,6 +17,8 @@ if SERVER then
 		self:SetMoveType( MOVETYPE_VPHYSICS )
 		self:SetSolid( SOLID_VPHYSICS )
 		self:DrawShadow( false )
+
+		self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
 	end
 
 	function ENT:Define( data )

@@ -4,10 +4,18 @@ include("shared.lua")
 
 ENT.SpawnNormalOffset = 25
 
+ENT.DriverActiveSound = "common/null.wav"
+ENT.DriverInActiveSound = "common/null.wav"
+
 function ENT:OnSpawn( PObj )
 	PObj:SetMass( 5000 )
 
-	self:AddDriverSeat( Vector(-30,0,33), Angle(0,-90,0) )
+	local DriverSeat = self:AddDriverSeat( Vector(-30,0,33), Angle(0,-90,0) )
+
+	local DoorHandler = self:AddDoorHandler( "!cabin" )
+	DoorHandler:SetSoundOpen( "vehicles/atv_ammo_open.wav" )
+	DoorHandler:SetSoundClose( "vehicles/atv_ammo_close.wav"  )
+	DoorHandler:LinkToSeat( DriverSeat )
 
 	self:AddEngine( Vector(100,145,30) )
 	self:AddEngine( Vector(100,-145,30) )

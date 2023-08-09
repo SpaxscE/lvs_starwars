@@ -3,12 +3,13 @@ include("shared.lua")
 function ENT:OnSpawn()
 	self:RegisterTrail( Vector(-95,143.87,30.93), 0, 20, 2, 2500, 150 )
 	self:RegisterTrail( Vector(-95,-143.87,30.93), 0, 20, 2, 2500, 150 )
+
+	self:CreateBonePoseParameter( "cabin", 1, Angle(0,0,0), Angle(0,0,0), Vector(0,0,0), Vector(0,0,50) )
 end
 
 function ENT:OnFrame()
 	self:EngineEffects()
 	self:AnimAstromech()
-	self:AnimCockpit()
 end
 
 ENT.EngineGlow = Material( "sprites/light_glow02_add" )
@@ -86,18 +87,6 @@ function ENT:AnimAstromech()
 	self.smastro = self.smastro and (self.smastro + ((self.AstroAng or 0) - self.smastro) * RealFrameTime() * 10) or 0
 
 	self:ManipulateBoneAngles( 2, Angle(self.smastro,0,0) )
-end
-
-function ENT:AnimCockpit()
-	local bOn = self:GetActive()
-
-	local TVal = bOn and 0 or 1
-
-	local Speed = FrameTime() * 4
-
-	self.SMcOpen = self.SMcOpen and self.SMcOpen + math.Clamp(TVal - self.SMcOpen,-Speed,Speed) or 0
-
-	self:ManipulateBonePosition( 1, Vector(0,0,self.SMcOpen * 50) ) 
 end
 
 function ENT:OnStartBoost()

@@ -177,3 +177,14 @@ function ENT:PhysicsSimulate( phys, deltatime )
 
 	return ForceAngle, ForceLinear, SIM_LOCAL_ACCELERATION
 end
+
+function ENT:OnMaintenance()
+	for _, Engine in pairs( self:GetEngines() ) do
+		if not IsValid( Engine ) then continue end
+
+		if not Engine.SetHP or not Engine.GetMaxHP or not Engine.SetDestroyed then continue end
+
+		Engine:SetHP( Engine:GetMaxHP() )
+		Engine:SetDestroyed( false ) 
+	end
+end

@@ -10,7 +10,15 @@ ENT._LVS = true
 
 function ENT:SetupDataTables()
 	self:NetworkVar( "Entity",0, "Base" )
-	self:NetworkVar( "Float",0, "DamageEffectsTime" )
+	self:NetworkVar( "Float",1, "HP" )
+	self:NetworkVar( "Float",2, "MaxHP" )
+
+	self:NetworkVar( "Bool",0, "Destroyed" )
+
+	if SERVER then
+		self:SetMaxHP( 100 )
+		self:SetHP( 100 )
+	end
 end
 
 if SERVER then
@@ -25,15 +33,7 @@ if SERVER then
 		local T = CurTime()
 		local vehicle = self:GetBase()
 
-		if not IsValid( vehicle ) or not vehicle:GetEngineActive() or self:GetDamageEffectsTime() < T then self:NextThink( T + 1 ) return true end
-
-		if vehicle:GetHP() >= vehicle:GetMaxHP() then
-			self:SetDamageEffectsTime( 0 )
-
-			self:NextThink( T + 1 )
-
-			return true
-		end
+		if not self:GetDestroyed() or not IsValid( vehicle ) or not vehicle:GetEngineActive() then self:NextThink( T + 1 ) return true end
 
 		local PhysObj = vehicle:GetPhysicsObject()
 
@@ -48,13 +48,21 @@ if SERVER then
 	end
 
 	function ENT:OnTakeDamage( dmginfo )
-		local vehicle = self:GetBase()
-	
-		if not IsValid( vehicle ) then return end
+		if self:GetDestroyed() then return end
 
-		local TimeBork = 2 + (vehicle:GetHP() / vehicle:GetMaxHP()) * 123
+		local Damage = dmginfo:GetDamage()
 
-		self:SetDamageEffectsTime( CurTime() + TimeBork )
+		if Damage <= 0 then return end
+
+		local CurHealth = self:GetHP()
+
+		local NewHealth = math.Clamp( CurHealth - Damage, 0, self:GetMaxHP() )
+
+		self:SetHP( NewHealth )
+
+		if NewHealth <= 0 then
+			self:SetDestroyed( true )
+		end
 	end
 
 	function ENT:UpdateTransmitState() 
@@ -89,20 +97,24 @@ function ENT:DamageFX( vehicle )
 	local HP = vehicle:GetHP()
 	local MaxHP = vehicle:GetMaxHP() 
 
-	if (self.nextDFX or 0) > T then return end
+	if HP <= 0 then return end
 
-	if self:GetDamageEffectsTime() < T then
-		if HP <= 0 or HP > MaxHP * 0.5 then return end
-	end
+	if (self.nextDFX or 0) > T then return end
 
 	self.nextDFX = T + 0.05
 
-	local effectdata = EffectData()
-		effectdata:SetOrigin( self:GetPos() )
-		effectdata:SetEntity( vehicle )
-	util.Effect( "lvs_engine_blacksmoke", effectdata )
+	local Destroyed = self:GetDestroyed()
 
-	if HP < MaxHP * 0.5 and self:GetDamageEffectsTime() > T then
+	if Destroyed or HP < MaxHP * 0.5 then
+		local effectdata = EffectData()
+			effectdata:SetOrigin( self:GetPos() )
+			effectdata:SetEntity( vehicle )
+		util.Effect( "lvs_engine_blacksmoke", effectdata )
+	end
+
+	if not Destroyed then return end
+
+	if HP < MaxHP * 0.5 then
 		local effectdata = EffectData()
 			effectdata:SetOrigin( self:GetPos() )
 			effectdata:SetNormal( -self:GetForward() )

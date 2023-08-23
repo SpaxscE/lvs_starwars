@@ -123,7 +123,6 @@ function ENT:InitWeapons()
 		projectile:Activate()
 		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
 		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
-		projectile:SetSpeed( ent:GetVelocity():Length() + 4000 )
 
 		ent._ProtonTorpedo = projectile
 

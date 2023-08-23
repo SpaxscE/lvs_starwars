@@ -210,7 +210,6 @@ function ENT:InitWeapons()
 				end
 				projectile:SetAttacker( IsValid( Driver ) and Driver or self )
 				projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
-				projectile:SetSpeed( 4000 )
 				projectile:SetDamage( 300 )
 				projectile:SetRadius( 150 )
 				projectile:Enable()

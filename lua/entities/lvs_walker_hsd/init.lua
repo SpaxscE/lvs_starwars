@@ -183,7 +183,7 @@ function ENT:ProjectorBeamDamage( target, attacker, HitPos, HitDir )
 
 	if target ~= self then
 		local dmginfo = DamageInfo()
-		dmginfo:SetDamage( 1000 * FrameTime() )
+		dmginfo:SetDamage( 250 * FrameTime() )
 		dmginfo:SetAttacker( attacker )
 		dmginfo:SetDamageType( DMG_SHOCK + DMG_ENERGYBEAM + DMG_AIRBOAT )
 		dmginfo:SetInflictor( self ) 

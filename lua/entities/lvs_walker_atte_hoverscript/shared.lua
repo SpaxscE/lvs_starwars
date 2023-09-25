@@ -40,3 +40,6 @@ function ENT:GetCrosshairFilterLookup()
 	return self._EntityLookUp
 end
 
+function ENT:GetVehicleType()
+	return "walker"
+end

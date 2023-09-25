@@ -186,3 +186,7 @@ function ENT:GetThrustStrenght()
 
 	return (self.MaxVelocity * self:GetThrottle() - ForwardVelocity) / self.MaxVelocity
 end
+
+function ENT:GetVehicleType()
+	return "starfighter"
+end

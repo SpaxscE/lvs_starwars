@@ -118,3 +118,7 @@ function ENT:StartCommand( ply, cmd )
 	self:CalcThrottle( ply, cmd )
 	self:CalcVtolThrottle( ply, cmd )
 end
+
+function ENT:GetVehicleType()
+	return "repulsorlift"
+end

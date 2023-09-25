@@ -64,3 +64,7 @@ end
 function ENT:GetThrustStrenght()
 	return 0
 end
+
+function ENT:GetVehicleType()
+	return "fakehover"
+end

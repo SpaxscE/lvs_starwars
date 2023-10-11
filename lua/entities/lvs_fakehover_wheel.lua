@@ -19,6 +19,8 @@ if SERVER then
 		self:DrawShadow( false )
 
 		self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
+
+		self:SetCollisionGroup( COLLISION_GROUP_PASSABLE_DOOR )
 	end
 
 	function ENT:Define( data )

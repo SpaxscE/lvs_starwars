@@ -6,6 +6,10 @@ function ENT:PreDraw()
 	return true
 end
 
+function ENT:PreDrawTranslucent()
+	return false
+end
+
 function ENT:DrawDriverBTL()
 	local pod = self:GetBTPodL()
 

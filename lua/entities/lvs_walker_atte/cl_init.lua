@@ -54,7 +54,9 @@ function ENT:DamageFX()
 end
 
 function ENT:PreDraw()
-	return false
+	self:DrawTurretDriver()
+
+	return true
 end
 
 function ENT:DrawTurretDriver()
@@ -77,12 +79,6 @@ function ENT:DrawTurretDriver()
 	ply:SetSequence( "drive_jeep" )
 	ply:SetRenderAngles( Ang )
 	ply:DrawModel()
-end
-
-function ENT:PreDrawTranslucent()
-	self:DrawTurretDriver()
-
-	return true
 end
 
 local zoom = 0

@@ -53,8 +53,13 @@ function ENT:AddWheel( pos, radius, mass, buoyancyratio, brakeforce )
 	self:DeleteOnRemove( wheel )
 	self:TransferCPPI( wheel )
 
-	self:TransferCPPI( constraint.AdvBallsocket(wheel, self,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -1, -1, -1, 1, 1, 1, 0, 0, 0, 0, 1) )
-	self:TransferCPPI( constraint.NoCollide( wheel, self, 0, 0 ) )
+	local ballsocket = constraint.AdvBallsocket(wheel, self,0,0,Vector(0,0,0),Vector(0,0,0),0,0, -1, -1, -1, 1, 1, 1, 0, 0, 0, 0, 1)
+	ballsocket.DoNotDuplicate = true
+	self:TransferCPPI( ballsocket )
+
+	local nocollide = constraint.NoCollide( wheel, self, 0, 0 )
+	nocollide.DoNotDuplicate = true
+	self:TransferCPPI( nocollide )
 
 	PhysObj:EnableMotion( true )
 

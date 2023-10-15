@@ -159,6 +159,7 @@ function ENT:InitRear()
 	local ballsocket = constraint.AdvBallsocket(ent, self,0,0,Vector(35,0,128),Vector(35,0,128),0,0, -20, -20, -20, 20, 20, 20, Friction, Friction, Friction, 0, 1)
 	ballsocket:DeleteOnRemove( self )
 	ballsocket:DeleteOnRemove( ent )
+	ballsocket.DoNotDuplicate = true
 	self:TransferCPPI( ballsocket )
 
 	self:AddToMotionController( rPObj )

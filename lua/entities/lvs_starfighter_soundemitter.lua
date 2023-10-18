@@ -20,8 +20,35 @@ if SERVER then
 		debugoverlay.Cross( self:GetPos(), 40, 5, Color( 255, 255, 255 ) )
 	end
 
+	function ENT:CheckWater( Base )
+		if bit.band( util.PointContents( self:GetPos() ), CONTENTS_WATER ) ~= CONTENTS_WATER then
+			if self.CountWater then
+				self.CountWater = nil
+			end
+
+			return
+		end
+
+		if Base.WaterLevelAutoStop > 3 then return end
+
+		self.CountWater = (self.CountWater or 0) + 1
+
+		if self.CountWater < 4 then return end
+
+		Base:StopEngine()
+	end
+
 	function ENT:Think()
-		return false
+
+		local Base = self:GetBase()
+
+		if IsValid( Base ) and Base:GetEngineActive() then
+			self:CheckWater( Base )
+		end
+
+		self:NextThink( CurTime() + 1 )
+
+		return true
 	end
 
 	function ENT:OnTakeDamage( dmginfo )

@@ -2,7 +2,6 @@ include("shared.lua")
 include( "sh_turret.lua" )
 include( "cl_prediction.lua" )
 
-
 function ENT:OnSpawn()
 	local mins, maxs = self:GetRenderBounds()
 	self:SetRenderBounds( mins, maxs, Vector( 80, 0, 0 ) )

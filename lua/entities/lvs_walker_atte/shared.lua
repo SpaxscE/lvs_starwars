@@ -59,12 +59,25 @@ function ENT:OnSetupDataTables()
 	self:AddDT( "Bool", "IsRagdoll" )
 	self:AddDT( "Vector", "AIAimVector" )
 
-	self:AddDT( "Float", "TurretPitch" )
-	self:AddDT( "Float", "TurretYaw" )
-
 	if SERVER then
 		self:NetworkVarNotify( "IsCarried", self.OnIsCarried )
 	end
+end
+
+function ENT:SetTurretPitch( num )
+	self._turretPitch = num
+end
+
+function ENT:SetTurretYaw( num )
+	self._turretYaw = num
+end
+
+function ENT:GetTurretPitch()
+	return (self._turretPitch or 0)
+end
+
+function ENT:GetTurretYaw()
+	return (self._turretYaw or 0)
 end
 
 function ENT:GetContraption()

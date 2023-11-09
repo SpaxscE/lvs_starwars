@@ -10,7 +10,7 @@ end
 function ENT:RunAI()
 	local RangerLength = 25000
 
-	local Target = self:AIGetTarget()
+	local Target = self:AIGetTarget( 180 )
 
 	local StartPos = self:LocalToWorld( self:OBBCenter() )
 

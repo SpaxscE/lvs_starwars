@@ -10,6 +10,8 @@ include("sv_vehiclespecific.lua")
 include("sh_camera_eyetrace.lua")
 include("sv_ai.lua")
 
+DEFINE_BASECLASS( "lvs_base" )
+
 function ENT:OnDriverChanged( Old, New, VehicleIsActive )
 	if VehicleIsActive then
 		if not self:GetEngineActive() and self:IsEngineStartAllowed() then
@@ -23,8 +25,18 @@ function ENT:OnDriverChanged( Old, New, VehicleIsActive )
 	self:SetMove( 0, 0 )
 end
 
+function ENT:StartEngine()
+	for _, wheel in pairs( self:GetWheels() ) do
+		if not IsValid( wheel ) then continue end
+
+		wheel:PhysWake()
+	end
+
+	BaseClass.StartEngine( self )
+end
+
 function ENT:PhysicsSimulate( phys, deltatime )
-	phys:Wake()
+	if self:GetEngineActive() then phys:Wake() end
 
 	local OnGroundMul = self:HitGround() and 1 or 0
 

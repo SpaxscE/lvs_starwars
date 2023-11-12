@@ -158,7 +158,7 @@ function ENT:OnSkyCollide( data, PhysObj )
 end
 
 function ENT:PhysicsSimulate( phys, deltatime )
-	phys:Wake()
+	if self:GetEngineActive() then phys:Wake() end
 
 	if not self:GetEngineActive() then
 		return Vector(0,0,0), Vector(0,0,0), SIM_NOTHING

@@ -1,4 +1,16 @@
 
+ENT._WheelEnts = {}
+
+function ENT:GetWheels()
+	for id, ent in pairs( self._WheelEnts ) do
+		if IsValid( ent ) then continue end
+
+		self._WheelEnts[ id ] = nil
+	end
+
+	return self._WheelEnts
+end
+
 function ENT:AddWheel( pos, radius, mass, buoyancyratio, brakeforce )
 	if not isvector( pos ) or not isnumber( radius ) or not isnumber( mass ) then return end
 
@@ -33,6 +45,8 @@ function ENT:AddWheel( pos, radius, mass, buoyancyratio, brakeforce )
 			buoyancyratio = buoyancyratio or 0,
 		}
 	)
+
+	table.insert( self._WheelEnts, wheel )
 
 	local PhysObj = wheel:GetPhysicsObject()
 	if not IsValid( PhysObj ) then

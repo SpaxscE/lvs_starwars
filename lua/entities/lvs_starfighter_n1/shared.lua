@@ -9,6 +9,9 @@ ENT.Category = "[LVS] - Star Wars"
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
+ENT.VehicleCategory = "Star Wars"
+ENT.VehicleSubCategory = "Starfighters"
+
 ENT.MDL = "models/blu/naboostarfighter.mdl"
 ENT.GibModels = {
 	"models/gibs/helicopter_brokenpiece_01.mdl",

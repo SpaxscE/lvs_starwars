@@ -6,6 +6,9 @@ ENT.Author = "Luna"
 ENT.Information = "Droid Starfighter of the Trade Federation"
 ENT.Category = "[LVS] - Star Wars"
 
+ENT.VehicleCategory = "Star Wars"
+ENT.VehicleSubCategory = "Starfighters"
+
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 

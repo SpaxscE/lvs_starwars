@@ -6,6 +6,9 @@ ENT.Author = "Luna"
 ENT.Information = "OG-9 Separatist Walker Droid"
 ENT.Category = "[LVS] - Star Wars"
 
+ENT.VehicleCategory = "Star Wars"
+ENT.VehicleSubCategory = "Walkers"
+
 ENT.Spawnable		= true
 ENT.AdminSpawnable	= false
 

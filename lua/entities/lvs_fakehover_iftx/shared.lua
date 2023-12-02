@@ -6,6 +6,9 @@ ENT.Author = "Luna"
 ENT.Information = "Hover Tank of the Galactic Republic"
 ENT.Category = "[LVS] - Star Wars"
 
+ENT.VehicleCategory = "Star Wars"
+ENT.VehicleSubCategory = "Hover Tanks"
+
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 

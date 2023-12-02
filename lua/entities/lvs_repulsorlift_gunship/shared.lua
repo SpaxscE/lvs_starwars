@@ -6,6 +6,9 @@ ENT.Author = "Luna"
 ENT.Information = "Gunship/Troop Transport of the Galactic Republic"
 ENT.Category = "[LVS] - Star Wars"
 
+ENT.VehicleCategory = "Star Wars"
+ENT.VehicleSubCategory = "Gunships"
+
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 

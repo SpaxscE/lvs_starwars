@@ -6,6 +6,9 @@ ENT.Author = "Luna"
 ENT.Information = "Assault Walker of the Galactic Republic"
 ENT.Category = "[LVS] - Star Wars"
 
+ENT.VehicleCategory = "Star Wars"
+ENT.VehicleSubCategory = "Walkers"
+
 ENT.Spawnable		= true
 ENT.AdminSpawnable	= false
 

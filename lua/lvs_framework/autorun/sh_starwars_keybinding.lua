@@ -92,6 +92,50 @@ hook.Add( "LVS:Initialize", "[LVS] - Star Wars - Keys", function()
 	end
 end )
 
+LVS:AddWeaponPreset( "TURBO", {
+	Icon = Material("lvs/weapons/nos.png"),
+	HeatRateUp = 0.1,
+	HeatRateDown = 0.1,
+	UseableByAI = false,
+	Attack = function( ent )
+		local PhysObj = ent:GetPhysicsObject()
+		if not IsValid( PhysObj ) then return end
+		local THR = ent:GetThrottle()
+		local FT = FrameTime()
+
+		local Vel = ent:GetVelocity():Length()
+
+		PhysObj:ApplyForceCenter( ent:GetForward() * math.Clamp(ent.MaxVelocity + 500 - Vel,0,1) * PhysObj:GetMass() * THR * FT * 150 ) -- increase speed
+		PhysObj:AddAngleVelocity( PhysObj:GetAngleVelocity() * FT * 0.5 * THR ) -- increase turn rate
+	end,
+	StartAttack = function( ent )
+		ent.TargetThrottle = 1.3
+		ent:EmitSound("lvs/vehicles/generic/boost.wav")
+	end,
+	FinishAttack = function( ent )
+		ent.TargetThrottle = 1
+	end,
+	OnSelect = function( ent )
+		ent:EmitSound("buttons/lever5.wav")
+	end,
+	OnThink = function( ent, active )
+		if not ent.TargetThrottle then return end
+
+		local Rate = FrameTime() * 0.5
+
+		ent:SetMaxThrottle( ent:GetMaxThrottle() + math.Clamp(ent.TargetThrottle - ent:GetMaxThrottle(),-Rate,Rate) )
+
+		local MaxThrottle = ent:GetMaxThrottle()
+
+		ent:SetThrottle( MaxThrottle )
+
+		if MaxThrottle == ent.TargetThrottle then
+			ent.TargetThrottle = nil
+		end
+	end,
+	OnOverheat = function( ent ) ent:EmitSound("lvs/overheat_boost.wav") end,
+} )
+
 if CLIENT then return end
 
 resource.AddWorkshop("2919757295")

@@ -1,2 +1,3 @@
+name=Star Wars
 version=90
 url=https://raw.githubusercontent.com/SpaxscE/lvs_starwars/main/data_static/lvs/2919757295.txt

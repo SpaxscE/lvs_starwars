@@ -21,7 +21,7 @@ if SERVER then
 	end
 
 	function ENT:GetRadius() 
-		return (self._radius or 100)
+		return (self._radius or 150)
 	end
 
 	return

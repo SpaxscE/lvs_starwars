@@ -58,24 +58,8 @@ function ENT:OnSpawn( PObj )
 	end
 
 	-- armor protecting the weakspot
-	self:AddDSArmor( {
-		pos = Vector(100,0,150),
-		ang = Angle(0,0,0),
-		mins = Vector(-50,-70,-80),
-		maxs =  Vector(80,70,60),
-		Callback = function( tbl, ent, dmginfo )
-			-- dont do anything, just prevent it from hitting the critical spot
-		end
-	} )
-	self:AddDSArmor( {
-		pos = Vector(-100,0,150),
-		ang = Angle(0,0,0),
-		mins = Vector(-80,-70,-80),
-		maxs =  Vector(50,70,60),
-		Callback = function( tbl, ent, dmginfo )
-			-- dont do anything, just prevent it from hitting the critical spot
-		end
-	} )
+	self:AddArmor( Vector(100,0,150), Angle(0,0,0), Vector(-50,-70,-80),Vector(80,70,60), 2000, 10000 )
+	self:AddArmor( Vector(-100,0,150), Angle(0,0,0), Vector(-50,-70,-80),Vector(50,70,60), 2000, 10000 )
 
 	-- weak spots
 	self:AddDS( {

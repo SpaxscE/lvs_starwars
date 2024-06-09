@@ -59,28 +59,8 @@ function ENT:OnSpawn( PObj )
 	end
 
 	-- armor points
-	self:AddDSArmor( {
-		pos = Vector(0,0,215),
-		ang = Angle(0,0,0),
-		mins = Vector(-75,-75,-85),
-		maxs =  Vector(75,75,60),
-		Callback = function( tbl, ent, dmginfo )
-			if ent:GetHP() > 1500 or self:GetIsRagdoll() then return end
-
-			local effectdata = EffectData()
-				effectdata:SetOrigin( ent:LocalToWorld( Vector(0,0,250) ) )
-			util.Effect( "lvs_explosion_nodebris", effectdata )
-
-			ent:BecomeRagdoll()
-		end
-	} )
-
-	self:AddDSArmor( {
-		pos = Vector(0,0,290),
-		ang = Angle(0,0,0),
-		mins = Vector(-30,-50,-20),
-		maxs =  Vector(30,50,20),
-	} )
+	self:AddArmor( Vector(0,0,215), Angle(0,0,0), Vector(-75,-75,-85),Vector(75,75,60), 800, 5000 )
+	self:AddArmor( Vector(0,0,290), Angle(0,0,0), Vector(-30,-50,-20),Vector(30,50,20), 400, 5000 )
 
 	-- weak points
 	self:AddDS( {
@@ -188,7 +168,7 @@ function ENT:ProjectorBeamDamage( target, attacker, HitPos, HitDir )
 		dmginfo:SetDamageType( DMG_SHOCK + DMG_ENERGYBEAM + DMG_AIRBOAT )
 		dmginfo:SetInflictor( self ) 
 		dmginfo:SetDamagePosition( HitPos ) 
-		dmginfo:SetDamageForce( HitDir * 10000 ) 
+		dmginfo:SetDamageForce( HitDir * 15000 ) 
 		target:TakeDamageInfo( dmginfo )
 	end
 end

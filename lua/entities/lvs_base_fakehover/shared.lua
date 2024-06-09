@@ -24,6 +24,8 @@ ENT.GroundTraceHitWater = true
 ENT.GroundTraceLength = 50
 ENT.GroundTraceHull = 100
 
+ENT.DisableBallistics = true
+
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
 

@@ -11,6 +11,8 @@ ENT.ThrustRateVtol = 2
 
 ENT.MaxPitch = 60
 
+ENT.DisableBallistics = true
+
 function ENT:CalcVtolThrottle( ply, cmd )
 	local Delta = FrameTime()
 

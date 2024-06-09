@@ -130,7 +130,7 @@ function ENT:InitWeapons()
 			bullet.Dir 	= ent:WeaponsInRange() and (ent:GetEyeTrace().HitPos - Muzzle.Pos):GetNormalized() or -Muzzle.Ang:Right()
 			bullet.Spread 	= Vector(0,0,0)
 			bullet.TracerName = "lvs_laser_red_aat"
-			bullet.Force	= 10
+			bullet.Force	= 15000
 			bullet.HullSize 	= 1
 			bullet.Damage	= 200
 			bullet.SplashDamage = 300

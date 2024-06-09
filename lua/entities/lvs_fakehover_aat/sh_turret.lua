@@ -74,7 +74,7 @@ function ENT:InitTurret()
 		bullet.Dir 	= Muzzle.Ang:Up()
 		bullet.Spread 	= Vector(0,0,0)
 		bullet.TracerName = "lvs_laser_red_aat"
-		bullet.Force	= 10
+		bullet.Force	= 16000
 		bullet.HullSize 	= 30
 		bullet.Damage	= 500
 		bullet.SplashDamage = 250

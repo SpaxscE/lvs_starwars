@@ -67,14 +67,7 @@ function ENT:OnSpawn( PObj )
 	self.SNDRight:SetParent( self, ID )
 
 	--Armor spots protecting the weakspots
-	self:AddDSArmor( {
-		pos = Vector(-70,0,35),
-		ang = Angle(0,0,0),
-		mins = Vector(-10,-40,-30),
-		maxs =  Vector(10,40,30),
-		Callback = function( tbl, ent, dmginfo )
-		end
-	} )
+	self:AddArmor( Vector(-70,0,35), Angle(0,0,0), Vector(-10,-40,-30), Vector(150,40,30), 500, 4000 )
 
 	-- weak spots
 	self:AddDS( {

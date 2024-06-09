@@ -56,42 +56,15 @@ function ENT:OnSpawn( PObj )
 	self.SNDTurret:SetSoundLevel( 110 )
 	self.SNDTurret:SetParent( self, ID )
 
+
 	--Armor spots protecting the weakspots
-	self:AddDSArmor( {
-		pos = Vector(60,0,45),
-		ang = Angle(0,0,0),
-		mins = Vector(-30,-28,-30),
-		maxs =  Vector(30,28,30),
-		Callback = function( tbl, ent, dmginfo )
-		end
-	} )
+	self:AddArmor( Vector(60,0,45), Angle(0,0,0), Vector(-30,-28,-30), Vector(30,28,30), 1000, 5000 )
 
-	self:AddDSArmor( {
-		pos = Vector(-30,0,75),
-		ang = Angle(0,0,0),
-		mins = Vector(-60,-28,-15),
-		maxs =  Vector(60,28,15),
-		Callback = function( tbl, ent, dmginfo )
-		end
-	} )
+	self:AddArmor( Vector(-30,0,75), Angle(0,0,0), Vector(-60,-28,-15),Vector(60,28,15), 500, 2500 )
 
-	self:AddDSArmor( {
-		pos = Vector(11,0,45),
-		ang = Angle(-55,0,0),
-		mins = Vector(-15,-28,-30),
-		maxs =  Vector(15,28,40),
-		Callback = function( tbl, ent, dmginfo )
-		end
-	} )
+	self:AddArmor( Vector(11,0,45), Angle(-55,0,0), Vector(-15,-28,-30),Vector(15,28,40), 250, 2500 )
 
-	self:AddDSArmor( {
-		pos = Vector(80,0,25),
-		ang = Angle(0,0,0),
-		mins = Vector(-50,-100,-15),
-		maxs =  Vector(50,100,15),
-		Callback = function( tbl, ent, dmginfo )
-		end
-	} )
+	self:AddArmor( Vector(80,0,25), Angle(0,0,0),  Vector(-50,-100,-15),Vector(50,100,15), 2000, 6000 )
 
 	-- weak spots
 	self:AddDS( {

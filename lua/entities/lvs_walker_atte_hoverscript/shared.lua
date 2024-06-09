@@ -24,6 +24,8 @@ ENT.HoverCollisionFilter = {
 	[COLLISION_GROUP_WORLD] = true,
 }
 
+ENT.DisableBallistics = true
+
 function ENT:SetupDataTables()
 	self:CreateBaseDT()
 end

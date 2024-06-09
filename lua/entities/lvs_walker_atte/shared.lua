@@ -181,7 +181,7 @@ function ENT:InitWeapons()
 		bullet.Dir 	= Dir
 		bullet.Spread 	= Vector( 0.01,  0.01, 0 )
 		bullet.TracerName = "lvs_laser_green_short"
-		bullet.Force	= 10
+		bullet.Force	= 15000
 		bullet.HullSize 	= 30
 		bullet.Damage	= 100
 		bullet.SplashDamage = 200

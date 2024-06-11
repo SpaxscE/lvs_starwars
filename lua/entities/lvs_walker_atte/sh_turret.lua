@@ -66,18 +66,28 @@ function ENT:InitTurret()
 
 		if not Muzzle then return end
 
-		local Driver = ent:GetDriver()
+		local bullet = {}
+		bullet.Src 	= Muzzle.Pos
+		bullet.Dir 	= Muzzle.Ang:Up()
+		bullet.Spread 	= Vector(0,0,0)
+		bullet.TracerName = "lvs_tracer_proton"
+		bullet.Force	= 150000
+		bullet.HullSize 	= 1
+		bullet.Damage	= 400
+		bullet.SplashDamage = 200
+		bullet.SplashDamageRadius = 250
+		bullet.SplashDamageEffect = "lvs_proton_explosion"
+		bullet.SplashDamageType = DMG_AIRBOAT
+		bullet.Velocity = 25000
+		bullet.Attacker 	= ent:GetDriver()
+		ent:LVSFireBullet( bullet )
 
-		local projectile = ents.Create( "lvs_protontorpedo" )
-		projectile:SetPos( Muzzle.Pos )
-		projectile:SetAngles( Muzzle.Ang:Up():Angle() )
-		projectile:SetParent( ent )
-		projectile:Spawn()
-		projectile:Activate()
-		projectile:SetAttacker( IsValid( Driver ) and Driver or self )
-		projectile:SetEntityFilter( ent:GetCrosshairFilterEnts() )
-		projectile:SetSpeed( 4000 )
-		projectile:Enable()
+		local effectdata = EffectData()
+		effectdata:SetStart( Vector(0,0,255) )
+		effectdata:SetOrigin( bullet.Src )
+		effectdata:SetNormal( Muzzle.Ang:Up() )
+		effectdata:SetEntity( ent )
+		util.Effect( "lvs_muzzle_colorable", effectdata )
 
 		ent:TakeAmmo()
 

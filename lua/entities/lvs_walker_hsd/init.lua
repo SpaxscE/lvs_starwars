@@ -168,7 +168,7 @@ function ENT:ProjectorBeamDamage( target, attacker, HitPos, HitDir )
 		dmginfo:SetDamageType( DMG_SHOCK + DMG_ENERGYBEAM + DMG_AIRBOAT )
 		dmginfo:SetInflictor( self ) 
 		dmginfo:SetDamagePosition( HitPos ) 
-		dmginfo:SetDamageForce( HitDir * 15000 ) 
+		dmginfo:SetDamageForce( HitDir * 20000 ) 
 		target:TakeDamageInfo( dmginfo )
 	end
 end

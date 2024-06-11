@@ -59,7 +59,10 @@ function ENT:OnSpawn( PObj )
 
 	-- armor protecting the weakspot
 	self:AddArmor( Vector(100,0,150), Angle(0,0,0), Vector(-50,-70,-80),Vector(80,70,60), 2000, 10000 )
-	self:AddArmor( Vector(-100,0,150), Angle(0,0,0), Vector(-50,-70,-80),Vector(50,70,60), 2000, 10000 )
+
+	self:AddArmor( Vector(180,0,180), Angle(45,0,0), Vector(0,-70,-80),Vector(80,70,0), 2000, 10000 )
+
+	self:AddArmor( Vector(-100,0,150), Angle(0,0,0), Vector(-140,-70,-80),Vector(50,70,60), 2000, 10000 )
 
 	-- weak spots
 	self:AddDS( {

@@ -57,39 +57,18 @@ function ENT:OnSpawn( PObj )
 	self.SNDTurret:SetParent( self, ID )
 
 
-	--Armor spots protecting the weakspots
 	self:AddArmor( Vector(60,0,45), Angle(0,0,0), Vector(-30,-28,-30), Vector(30,28,30), 1000, 5000 )
 
-	self:AddArmor( Vector(-30,0,75), Angle(0,0,0), Vector(-60,-28,-15),Vector(60,28,15), 500, 2500 )
+	self:AddArmor( Vector(-30,0,75), Angle(0,0,0), Vector(-80,-28,-15),Vector(80,28,20), 500, 2500 )
 
-	self:AddArmor( Vector(11,0,45), Angle(-55,0,0), Vector(-15,-28,-30),Vector(15,28,40), 250, 2500 )
+	self:AddArmor( Vector(-70,0,100), Angle(0,0,0), Vector(-35,-30,-15),Vector(40,30,15), 500, 12000 )
+
+	self:AddArmor( Vector(11,0,45), Angle(-55,0,0), Vector(-15,-28,-30),Vector(15,28,40), 250, 500 )
 
 	self:AddArmor( Vector(80,0,25), Angle(0,0,0),  Vector(-50,-100,-15),Vector(50,100,15), 2000, 6000 )
 
-	-- weak spots
-	self:AddDS( {
-		pos = Vector(11,40,46),
-		ang = Angle(-55,0,0),
-		mins = Vector(-12,-12,-12),
-		maxs =  Vector(12,12,12),
-		Callback = function( tbl, ent, dmginfo )
-			if dmginfo:GetDamage() <= 0 then return end
-
-			dmginfo:ScaleDamage( 1.5 )
-		end
-	} )
-
-	self:AddDS( {
-		pos = Vector(11,-40,46),
-		ang = Angle(-55,0,0),
-		mins = Vector(-12,-12,-12),
-		maxs =  Vector(12,12,12),
-		Callback = function( tbl, ent, dmginfo )
-			if dmginfo:GetDamage() <= 0 then return end
-
-			dmginfo:ScaleDamage( 1.5 )
-		end
-	} )
+	self:AddArmor( Vector(11,40,46), Angle(-55,0,0), Vector(-12,-12,-50),Vector(12,12,50), 25, 2500 )
+	self:AddArmor( Vector(11,-40,46), Angle(-55,0,0), Vector(-12,-12,-50),Vector(12,12,50), 25, 2500 )
 end
 
 function ENT:OnTick()

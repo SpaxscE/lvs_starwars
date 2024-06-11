@@ -199,7 +199,7 @@ function ENT:BallturretDamage( target, attacker, HitPos, HitDir )
 		dmginfo:SetDamageType( DMG_SHOCK + DMG_ENERGYBEAM + DMG_AIRBOAT )
 		dmginfo:SetInflictor( self ) 
 		dmginfo:SetDamagePosition( HitPos ) 
-		dmginfo:SetDamageForce( HitDir * 10000 ) 
+		dmginfo:SetDamageForce( HitDir * 12000 ) 
 		target:TakeDamageInfo( dmginfo )
 	end
 end

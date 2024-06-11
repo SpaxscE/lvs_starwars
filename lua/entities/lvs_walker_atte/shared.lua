@@ -25,7 +25,7 @@ ENT.GibModels = {
 
 ENT.AITEAM = 2
 
-ENT.MaxHealth = 12000
+ENT.MaxHealth = 10000
 
 ENT.ForceLinearMultiplier = 1
 

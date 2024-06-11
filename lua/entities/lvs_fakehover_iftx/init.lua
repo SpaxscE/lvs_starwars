@@ -66,21 +66,11 @@ function ENT:OnSpawn( PObj )
 	self.SNDRight:SetSoundLevel( 110 )
 	self.SNDRight:SetParent( self, ID )
 
-	--Armor spots protecting the weakspots
-	self:AddArmor( Vector(-70,0,35), Angle(0,0,0), Vector(-10,-40,-30), Vector(150,40,30), 500, 4000 )
-
-	-- weak spots
-	self:AddDS( {
-		pos = Vector(-95,0,35),
-		ang = Angle(0,0,0),
-		mins = Vector(-10,-25,-25),
-		maxs =  Vector(10,25,25),
-		Callback = function( tbl, ent, dmginfo )
-			if dmginfo:GetDamage() <= 0 then return end
-
-			dmginfo:ScaleDamage( 1.5 )
-		end
-	} )
+	self:AddArmor( Vector(30,0,25), Angle(20,0,0), Vector(-45,-40,-20), Vector(40,40,10), 750, 4000 )
+	self:AddArmor( Vector(-60,0,35), Angle(0,0,0), Vector(0,-40,-30), Vector(50,40,30), 250, 2500 )
+	self:AddArmor( Vector(-60,0,35), Angle(0,0,0), Vector(-40,-40,-30), Vector(0,40,30), 10, 500 )
+	self:AddArmor( Vector(0,60,10), Angle(0,0,-15), Vector(-120,-25,-10), Vector(130,25,10), 50, 1000 )
+	self:AddArmor( Vector(0,-60,10), Angle(0,0,15), Vector(-120,-25,-10), Vector(130,25,10), 50, 1000 )
 end
 
 function ENT:AnimHatch()

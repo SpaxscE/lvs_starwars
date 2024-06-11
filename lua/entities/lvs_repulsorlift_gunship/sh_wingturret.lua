@@ -78,7 +78,6 @@ function ENT:InitWeaponGunner()
 	weapon.Delay = 0
 	weapon.HeatRateUp = 0
 	weapon.HeatRateDown = 0
-	weapon.OnOverheat = function( ent ) ent:EmitSound("lvs/overheat.wav") end
 	weapon.StartAttack = function( ent )
 		ent.ShouldFire = true
 	end

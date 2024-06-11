@@ -26,7 +26,7 @@ ENT.GibModels = {
 
 ENT.AITEAM = 1
 
-ENT.MaxHealth = 2700
+ENT.MaxHealth = 2000
 
 ENT.ForceAngleMultiplier = 2
 ENT.ForceAngleDampingMultiplier = 1

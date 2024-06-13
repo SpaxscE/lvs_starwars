@@ -86,11 +86,15 @@ function ENT:ApproachTargetAngle( TargetAngle, OverridePitch, OverrideYaw, Overr
 	self:SetSteer( Vector( math.Clamp(Roll * 1.25,-1,1), math.Clamp(-Pitch * 1.25,-1,1), -Yaw) )
 end
 
-function ENT:CalcAero( phys, deltatime )
+function ENT:CalcAero( phys, deltatime, EntTable )
+	if not EntTable then
+		EntTable = self:GetTable()
+	end
+
 	-- mouse aim needs to run at high speed.
 	if self:GetAI() then
-		if self._lvsAITargetAng then
-			self:ApproachTargetAngle( self._lvsAITargetAng )
+		if EntTable._lvsAITargetAng then
+			self:ApproachTargetAngle( EntTable._lvsAITargetAng )
 		end
 	else
 		local ply = self:GetDriver()
@@ -132,9 +136,9 @@ function ENT:CalcAero( phys, deltatime )
 		end
 	end
 
-	local Pitch = math.Clamp(Steer.y - GravityPitch,-1,1) * self.TurnRatePitch * 3
-	local Yaw = math.Clamp(Steer.z * 4 + GravityYaw,-1,1) * self.TurnRateYaw
-	local Roll = math.Clamp(Steer.x * 1.5,-1,1) * self.TurnRateRoll * 12
+	local Pitch = math.Clamp(Steer.y - GravityPitch,-1,1) * EntTable.TurnRatePitch * 3
+	local Yaw = math.Clamp(Steer.z * 4 + GravityYaw,-1,1) * EntTable.TurnRateYaw
+	local Roll = math.Clamp(Steer.x * 1.5,-1,1) * EntTable.TurnRateRoll * 12
 
 	local VelL = self:WorldToLocal( self:GetPos() + Vel )
 
@@ -164,16 +168,18 @@ function ENT:PhysicsSimulate( phys, deltatime )
 		return Vector(0,0,0), Vector(0,0,0), SIM_NOTHING
 	end
 
-	local Aero, Torque = self:CalcAero( phys, deltatime )
+	local EntTable = self:GetTable()
 
-	local Thrust = self:GetThrustStrenght() * self.MaxThrust * 100
+	local Aero, Torque = self:CalcAero( phys, deltatime, EntTable )
+
+	local Thrust = self:GetThrustStrenght() * EntTable.MaxThrust * 100
 
 	if self:IsDestroyed() then
 		Thrust = math.max( Thrust, 0 ) -- dont allow braking, but allow accelerating while destroyed
 	end
 
-	local ForceLinear = (Aero * 10000 * self.ForceLinearMultiplier + Vector(Thrust,0,0)) * deltatime
-	local ForceAngle = (Torque * 25 * self.ForceAngleMultiplier - phys:GetAngleVelocity() * 1.5 * self.ForceAngleDampingMultiplier) * deltatime * 250
+	local ForceLinear = (Aero * 10000 * EntTable.ForceLinearMultiplier + Vector(Thrust,0,0)) * deltatime
+	local ForceAngle = (Torque * 25 * EntTable.ForceAngleMultiplier - phys:GetAngleVelocity() * 1.5 * EntTable.ForceAngleDampingMultiplier) * deltatime * 250
 
 	return ForceAngle, ForceLinear, SIM_LOCAL_ACCELERATION
 end

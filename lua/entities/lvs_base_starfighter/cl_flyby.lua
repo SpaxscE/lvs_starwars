@@ -6,6 +6,8 @@ function ENT:FlyByThink()
 
 	if not IsValid( ply ) then return end
 
+	local EntTable = self:GetTable()
+
 	if ply:lvsGetVehicle() == self then self.OldApproaching = false return end
 
 	local ViewEnt = ply:GetViewEntity()
@@ -14,15 +16,15 @@ function ENT:FlyByThink()
 
 	local Time = CurTime()
 
-	if (self._nextflyby or 0) > Time then return end
+	if (EntTable._nextflyby or 0) > Time then return end
 
-	self._nextflyby = Time + 0.1
+	EntTable._nextflyby = Time + 0.1
 
 	local Vel = self:GetVelocity()
 
-	if self:GetThrottle() <= 0.75 or Vel:Length() <= self.MaxVelocity * 0.75 then return end
+	if self:GetThrottle() <= 0.75 or Vel:Length() <= EntTable.MaxVelocity * 0.75 then return end
 
-	local Sub = ViewEnt:GetPos() - self:GetPos() - Vel * self.FlyByAdvance
+	local Sub = ViewEnt:GetPos() - self:GetPos() - Vel * EntTable.FlyByAdvance
 	local ToPlayer = Sub:GetNormalized()
 	local VelDir = Vel:GetNormalized()
 
@@ -30,8 +32,8 @@ function ENT:FlyByThink()
 
 	local Approaching = ApproachAngle < 80
 
-	if Approaching ~= self.OldApproaching then
-		self.OldApproaching = Approaching
+	if Approaching ~= EntTable.OldApproaching then
+		EntTable.OldApproaching = Approaching
 
 		if Approaching then
 			self:StopFlyBy()
@@ -44,14 +46,18 @@ end
 function ENT:OnFlyBy( Pitch )
 	if not self.FlyBySound then return end
 
-	self.flybysnd = CreateSound( self, self.FlyBySound )
-	self.flybysnd:SetSoundLevel( 95 )
-	self.flybysnd:PlayEx( 1, Pitch )
+	local EntTable = self:GetTable()
+
+	EntTable.flybysnd = CreateSound( self, EntTable.FlyBySound )
+	EntTable.flybysnd:SetSoundLevel( 95 )
+	EntTable.flybysnd:PlayEx( 1, Pitch )
 end
 
 function ENT:StopFlyBy()
-	if self.flybysnd then
-		self.flybysnd:Stop()
-		self.flybysnd = nil
-	end
+	local EntTable = self:GetTable()
+
+	if not EntTable.flybysnd then return end
+
+	EntTable.flybysnd:Stop()
+	EntTable.flybysnd = nil
 end

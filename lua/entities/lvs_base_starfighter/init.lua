@@ -14,6 +14,16 @@ include("sh_camera_eyetrace.lua")
 
 DEFINE_BASECLASS( "lvs_base" )
 
+function ENT:OnDriverChanged( Old, New, VehicleIsActive )
+
+	if not VehicleIsActive and self:GetThrottle() == 0 then
+		self:SetSteer( vector_origin )
+		self:SetVtolMove( vector_origin )
+	end
+
+	self:OnPassengerChanged( Old, New, 1 )
+end
+
 function ENT:StartEngine()
 	if self:GetEngineActive() or not self:IsEngineStartAllowed() then return end
 

@@ -84,6 +84,8 @@ if SERVER then
 	end
 
 	function ENT:OnTakeDamage( dmginfo )
+		if dmginfo:IsDamageType( DMG_BLAST ) then return end
+
 		local base = self:GetBase()
 
 		if not IsValid( base ) then return end

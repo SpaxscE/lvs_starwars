@@ -159,7 +159,7 @@ function ENT:InitRear()
 	self.SNDRear:SetParent( ent )
 
 	-- clear the filters, because they might have been build by now
-	self:RebuildCrosshairFilterEnts()
+	self.CrosshairFilterEnts = nil
 	self._EntityLookUp = nil
 end
 

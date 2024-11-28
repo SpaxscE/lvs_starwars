@@ -72,6 +72,7 @@ function ENT:InitTurret()
 		bullet.Spread 	= Vector(0,0,0)
 		bullet.TracerName = "lvs_tracer_proton"
 		bullet.Force	= 150000
+		bullet.EnableBallistics = true
 		bullet.HullSize 	= 1
 		bullet.Damage	= 400
 		bullet.SplashDamage = 200

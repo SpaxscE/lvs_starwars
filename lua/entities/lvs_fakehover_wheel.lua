@@ -24,12 +24,14 @@ if SERVER then
 	end
 
 	function ENT:Define( data )
-		local bbox = Vector(data.radius,data.radius,data.radius)
-
 		self:PhysicsInitSphere( data.radius, "gmod_silent" )
-		self:SetCollisionBounds( -bbox, bbox )
+
+		local VectorNull = Vector(0,0,0)
+
+		self:SetCollisionBounds( VectorNull, VectorNull )
 
 		local PhysObj = self:GetPhysicsObject()
+
 		if IsValid( PhysObj ) then
 			PhysObj:EnableDrag( false )
 			PhysObj:EnableMotion( false )

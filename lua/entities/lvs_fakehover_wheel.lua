@@ -20,6 +20,9 @@ if SERVER then
 
 		self:AddEFlags( EFL_NO_PHYSCANNON_INTERACTION )
 
+		-- this is so vj npcs can still see us
+		self:AddEFlags( EFL_DONTBLOCKLOS )
+
 		self:SetCollisionGroup( COLLISION_GROUP_PASSABLE_DOOR )
 	end
 

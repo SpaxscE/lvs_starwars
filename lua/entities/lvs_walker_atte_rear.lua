@@ -9,6 +9,11 @@ if SERVER then
 		self:SetMoveType( MOVETYPE_VPHYSICS )
 		self:SetSolid( SOLID_VPHYSICS )
 		self:SetUseType( SIMPLE_USE )
+
+		-- this is so vj npcs can still see us
+		self:AddEFlags( EFL_DONTBLOCKLOS )
+
+		-- this if for our npc relationship system to work
 		self:AddFlags( FL_OBJECT )
 	end
 

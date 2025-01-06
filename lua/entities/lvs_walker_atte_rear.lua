@@ -13,7 +13,7 @@ if SERVER then
 		-- this is so vj npcs can still see us
 		self:AddEFlags( EFL_DONTBLOCKLOS )
 
-		-- this if for our npc relationship system to work
+		-- this is for our npc relationship system to work
 		self:AddFlags( FL_OBJECT )
 	end
 

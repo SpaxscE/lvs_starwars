@@ -27,14 +27,14 @@ ENT.GroundTraceHull = 100
 ENT.DisableBallistics = true
 
 function ENT:SetupDataTables()
-	self:CreateBaseDT()
-
 	self:AddDT( "Vector", "AIAimVector" )
 	self:AddDT( "Bool", "Disabled" )
 
 	if SERVER then
 		self:NetworkVarNotify( "Disabled", self.OnDisabled )
 	end
+
+	self:CreateBaseDT()
 end
 
 function ENT:HitGround()

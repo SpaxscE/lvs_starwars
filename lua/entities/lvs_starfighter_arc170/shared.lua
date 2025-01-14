@@ -123,7 +123,6 @@ function ENT:InitWeapons()
 	end
 	weapon.OnSelect = function( ent )
 		ent:EmitSound("physics/metal/weapon_impact_soft3.wav")
-		if ent.SetFoils then ent:SetFoils( true ) end
 	end
 	weapon.OnOverheat = function( ent ) end
 	self:AddWeapon( weapon )

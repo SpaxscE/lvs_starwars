@@ -39,18 +39,8 @@ function ENT:OnEngineActiveChanged( Active )
 	end
 end
 
-function ENT:OnTick()
-	if self:ForceDisableFoils() then
-		if self:GetThrottle() < 0.1 then
-			self:DisableVehicleSpecific()
-		end
-	end
-end
-
 function ENT:OnVehicleSpecificToggled( new )
 	local cur = self:GetFoils()
-
-	if not cur and self:ForceDisableFoils() then return end
 
 	if cur ~= new then
 		self:SetFoils( new )
@@ -65,14 +55,4 @@ function ENT:OnFoilsChanged( name, old, new)
 	else
 		self:SetMaxThrottle( 1.2 )
 	end
-end
-
-function ENT:ForceDisableFoils()
-	local trace = util.TraceLine( {
-		start = self:LocalToWorld( Vector(0,0,50) ),
-		endpos = self:LocalToWorld( Vector(0,0,-150) ),
-		filter = self:GetCrosshairFilterEnts()
-	} )
-	
-	return trace.Hit
 end

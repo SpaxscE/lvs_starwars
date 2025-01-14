@@ -30,8 +30,6 @@ ENT.ForceAngleDampingMultiplier = 1
 ENT.DisableBallistics = true
 
 function ENT:SetupDataTables()
-	self:CreateBaseDT()
-
 	self:AddDT( "Vector", "Steer" )
 	self:AddDT( "Vector", "AIAimVector" )
 	self:AddDT( "Vector", "NWVtolMove" )
@@ -41,6 +39,8 @@ function ENT:SetupDataTables()
 	if SERVER then
 		self:SetMaxThrottle( 1 )
 	end
+
+	self:CreateBaseDT()
 end
 
 function ENT:PlayerDirectInput( ply, cmd )

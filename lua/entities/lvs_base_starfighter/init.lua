@@ -194,7 +194,7 @@ function ENT:PhysicsSimulate( phys, deltatime )
 	return ForceAngle, ForceLinear, SIM_LOCAL_ACCELERATION
 end
 
-function ENT:OnMaintenance()
+function ENT:OnMaintenance(entity)
 	for _, Engine in pairs( self:GetEngines() ) do
 		if not IsValid( Engine ) then continue end
 

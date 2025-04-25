@@ -168,7 +168,7 @@ function ENT:OnTick()
 	self:ContraptionThink()
 end
 
-function ENT:OnMaintenance()
+function ENT:OnMaintenance(entity)
 	self:UnRagdoll()
 end
 

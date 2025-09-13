@@ -348,8 +348,9 @@ function ENT:InitTurret()
 	weapon.HudPaint = function( ent, X, Y, ply )
 		local base = ent:GetVehicle()
 
-		if not IsValid( base ) then return end
+		if not IsValid( base ) or not base.GetTurretEnabled then return end
 
+		if not base:GetTurretEnabled() then return end
 		local ID = base:LookupAttachment( "muzzle" )
 
 		local Muzzle = base:GetAttachment( ID )
@@ -367,6 +368,27 @@ function ENT:InitTurret()
 			ent:LVSPaintHitMarker( MuzzlePos2D )
 		end
 	end
+	weapon.OnThink = function( ent, active )
+		if ent:GetSelectedWeapon() ~= 1 then return end
+
+		local base = ent:GetVehicle()
+
+		if not IsValid( base ) or not base.SetTurretEnabled then return end
+
+		if base:GetIsCarried() then
+			if base:GetTurretEnabled() then
+				base:SetTurretEnabled( false )
+				base:SetTurretPitch( base.TurretPitchOffset )
+				base:SetTurretYaw( base.TurretYawOffset )
+			end
+
+			return
+		end
+
+		if base:GetTurretEnabled() then return end
+
+		base:SetTurretEnabled( true )
+	end
 	self:AddWeapon( weapon, 2 )
 
 	local weapon = {}
@@ -377,6 +399,7 @@ function ENT:InitTurret()
 	weapon.HeatRateDown = 0
 	weapon.OnSelect = function( ent )
 		local base = ent:GetVehicle()
+
 		if not IsValid( base ) then return end
 
 		if base.SetTurretEnabled then
@@ -385,6 +408,7 @@ function ENT:InitTurret()
 	end
 	weapon.OnDeselect = function( ent )
 		local base = ent:GetVehicle()
+
 		if not IsValid( base ) then return end
 
 		if base.SetTurretEnabled then

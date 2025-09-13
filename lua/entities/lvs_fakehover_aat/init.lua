@@ -1,6 +1,5 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
-AddCSLuaFile( "cl_prediction.lua" )
 AddCSLuaFile( "sh_turret.lua" )
 include("shared.lua")
 include( "sh_turret.lua" )
@@ -69,9 +68,6 @@ function ENT:OnSpawn( PObj )
 
 	self:AddArmor( Vector(11,40,46), Angle(-55,0,0), Vector(-12,-12,-50),Vector(12,12,50), 25, 2500 )
 	self:AddArmor( Vector(11,-40,46), Angle(-55,0,0), Vector(-12,-12,-50),Vector(12,12,50), 25, 2500 )
-end
-
-function ENT:OnTick()
 end
 
 function ENT:OnCollision( data, physobj )

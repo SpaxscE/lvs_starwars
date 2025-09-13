@@ -62,22 +62,6 @@ function ENT:OnSetupDataTables()
 	end
 end
 
-function ENT:SetTurretPitch( num )
-	self._turretPitch = num
-end
-
-function ENT:SetTurretYaw( num )
-	self._turretYaw = num
-end
-
-function ENT:GetTurretPitch()
-	return (self._turretPitch or 0)
-end
-
-function ENT:GetTurretYaw()
-	return (self._turretYaw or 0)
-end
-
 function ENT:GetAimAngles()
 	local trace = self:GetEyeTrace()
 
@@ -95,6 +79,8 @@ function ENT:WeaponsInRange()
 	return not ((AimAnglesR.p >= 20 and AimAnglesL.p >= 20) or (AimAnglesR.p <= -30 and AimAnglesL.p <= -30) or (math.abs(AimAnglesL.y) + math.abs(AimAnglesL.y)) >= 60)
 end
 
+local COLOR_RED = Color(255,0,0,255)
+local COLOR_WHITE = Color(255,255,255,255)
 function ENT:InitWeapons()
 	local weapon = {}
 	weapon.Icon = Material("lvs/weapons/hmg.png")
@@ -180,6 +166,22 @@ function ENT:InitWeapons()
 		ent:SetPoseParameter("cannon_left_pitch", AimAnglesL.p )
 		ent:SetPoseParameter("cannon_left_yaw", AimAnglesL.y )
 	end
+	weapon.HudPaint = function( ent, X, Y, ply )
+		local base = ent:GetVehicle()
+
+		if not IsValid( base ) then return end
+
+		if ent:GetIsCarried() then return false end
+
+
+		local Col = base:WeaponsInRange() and COLOR_WHITE or COLOR_RED
+
+		local Pos2D = base:GetEyeTrace().HitPos:ToScreen() 
+
+		ent:PaintCrosshairCenter( Pos2D, Col )
+		ent:PaintCrosshairOuter( Pos2D, Col )
+		ent:LVSPaintHitMarker( Pos2D )
+	end
 	self:AddWeapon( weapon )
 
 
@@ -262,9 +264,88 @@ function ENT:InitWeapons()
 	weapon.OnSelect = function( ent )
 		ent:EmitSound("weapons/shotgun/shotgun_cock.wav")
 	end
+	weapon.HudPaint = function( ent, X, Y, ply )
+		local base = ent:GetVehicle()
+
+		if not IsValid( base ) then return end
+
+		if ent:GetIsCarried() then return false end
+
+
+		local Col = base:WeaponsInRange() and COLOR_WHITE or COLOR_RED
+
+		local Pos2D = base:GetEyeTrace().HitPos:ToScreen() 
+
+		ent:PaintCrosshairSquare( Pos2D, Col )
+		ent:LVSPaintHitMarker( Pos2D )
+	end
 	self:AddWeapon( weapon )
 
 	self:InitTurret()
+end
+
+function ENT:InitTurret()
+	local weapon = {}
+	weapon.Icon = Material("lvs/weapons/hmg.png")
+	weapon.Ammo = -1
+	weapon.Delay = 0.3
+	weapon.HeatRateUp = 1.25
+	weapon.HeatRateDown = 0.2
+	weapon.OnOverheat = function( ent )
+		ent:EmitSound("lvs/vehicles/aat/overheat.mp3")
+	end
+	weapon.Attack = function( ent )
+		local base = ent:GetVehicle()
+
+		if not IsValid( base ) then return end
+
+		if base:GetIsCarried() then return true end
+
+		local ID = base:LookupAttachment( "muzzle" )
+		local Muzzle = base:GetAttachment( ID )
+
+		if not Muzzle then return end
+
+		local bullet = {}
+		bullet.Src 	= Muzzle.Pos
+		bullet.Dir 	= Muzzle.Ang:Up()
+		bullet.Spread 	= Vector(0,0,0)
+		bullet.TracerName = "lvs_laser_red_aat"
+		bullet.Force	= 16000
+		bullet.HullSize 	= 30
+		bullet.Damage	= 500
+		bullet.SplashDamage = 250
+		bullet.SplashDamageRadius = 250
+		bullet.Velocity = 6000
+		bullet.Attacker 	= ent:GetDriver()
+		bullet.Callback = function(att, tr, dmginfo)
+			local effectdata = EffectData()
+				effectdata:SetOrigin( tr.HitPos )
+			util.Effect( "lvs_laser_explosion_aat", effectdata )
+		end
+		ent:LVSFireBullet( bullet )
+
+		local effectdata = EffectData()
+		effectdata:SetStart( Vector(255,50,50) )
+		effectdata:SetOrigin( bullet.Src )
+		effectdata:SetNormal( Muzzle.Ang:Up() )
+		effectdata:SetEntity( ent )
+		util.Effect( "lvs_muzzle_colorable", effectdata )
+
+		ent:TakeAmmo()
+
+		base:PlayAnimation( "fire" )
+
+		local PhysObj = base:GetPhysicsObject()
+		if IsValid( PhysObj ) then
+			PhysObj:ApplyForceOffset( -Muzzle.Ang:Up() * 25000, Muzzle.Pos )
+		end
+
+		if not IsValid( base.SNDTurret ) then return end
+
+		base.SNDTurret:PlayOnce( 100 + math.cos( CurTime() + ent:EntIndex() * 1337 ) * 5 + math.Rand(-1,1), 1 )
+	end
+	self:AddWeapon( weapon, 2 )
 end
 
 ENT.EngineSounds = {

@@ -171,7 +171,7 @@ function ENT:InitWeapons()
 
 		if not IsValid( base ) then return end
 
-		if ent:GetIsCarried() then return false end
+		if base:GetIsCarried() then return false end
 
 
 		local Col = base:WeaponsInRange() and COLOR_WHITE or COLOR_RED

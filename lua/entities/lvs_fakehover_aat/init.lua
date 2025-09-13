@@ -62,12 +62,14 @@ function ENT:OnSpawn( PObj )
 	self.SNDTurret:SetSoundLevel( 110 )
 	self.SNDTurret:SetParent( self, ID )
 
+	-- turret
+	local TurretArmor = self:AddArmor( Vector(-70,0,100), Angle(0,0,0), Vector(-35,-30,-15),Vector(40,30,15), 500, 12000 )
+	TurretArmor:SetLabel( "Turret" )
+	self:SetTurretArmor( TurretArmor )
 
 	self:AddArmor( Vector(60,0,45), Angle(0,0,0), Vector(-30,-28,-30), Vector(30,28,30), 1000, 5000 )
 
 	self:AddArmor( Vector(-30,0,75), Angle(0,0,0), Vector(-80,-28,-15),Vector(80,28,20), 500, 2500 )
-
-	self:AddArmor( Vector(-70,0,100), Angle(0,0,0), Vector(-35,-30,-15),Vector(40,30,15), 500, 12000 )
 
 	self:AddArmor( Vector(11,0,45), Angle(-55,0,0), Vector(-15,-28,-30),Vector(15,28,40), 250, 500 )
 

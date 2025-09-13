@@ -6,11 +6,11 @@ ENT.TurretPodIndex = 2
 
 ENT.TurretBallisticsPredicted = false
 
-ENT.TurretBallisticsProjectileVelocity = 50000
+ENT.TurretBallisticsProjectileVelocity = 6000
 ENT.TurretBallisticsMuzzleAttachment = "muzzle"
-ENT.TurretBallisticsViewAttachment = "muzzle"
+ENT.TurretBallisticsViewAttachment = "turret_view"
 
-ENT.TurretAimRate = 25
+ENT.TurretAimRate = 80
 
 ENT.TurretRotationSound = "vehicles/tank_turret_loop1.wav"
 
@@ -23,3 +23,15 @@ ENT.TurretPitchOffset = 0
 ENT.TurretYawPoseParameterName = "turret_yaw"
 ENT.TurretYawMul = 1
 ENT.TurretYawOffset = 0
+
+function ENT:GetTurretViewOrigin()
+	local ID = self:LookupAttachment( self.TurretBallisticsViewAttachment )
+
+	local Att = self:GetAttachment( ID )
+
+	if not Att then return self:GetPos(), false end
+
+	local Pos = Att.Pos + Att.Ang:Forward() * 20 - Att.Ang:Right() * 5 - Att.Ang:Up() * 15
+
+	return Pos, true
+end

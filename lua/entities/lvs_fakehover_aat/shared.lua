@@ -12,7 +12,7 @@ ENT.VehicleSubCategory = "Hover Tanks"
 ENT.Spawnable			= true
 ENT.AdminSpawnable		= false
 
-ENT.MDL = "models/blu/aat.mdl"
+ENT.MDL = "models/blu/aat_fixed.mdl"
 ENT.GibModels = {
 	"models/gibs/helicopter_brokenpiece_01.mdl",
 	"models/gibs/helicopter_brokenpiece_02.mdl",
@@ -101,7 +101,7 @@ function ENT:InitWeapons()
 		ent.MirrorPrimary = not ent.MirrorPrimary
 
 		local Pos = ent.MirrorPrimary and MuzzleL.Pos or MuzzleR.Pos
-		local Dir =  (ent.MirrorPrimary and MuzzleL.Ang or MuzzleR.Ang):Up()
+		local Dir =  (ent.MirrorPrimary and MuzzleL.Ang or MuzzleR.Ang):Forward()
 
 		local bullet = {}
 		bullet.Src 	= Pos
@@ -231,7 +231,7 @@ function ENT:InitWeapons()
 					local Start = Pos + ent:GetForward() * 50
 					local Dir = (ent:GetEyeTrace().HitPos - Start):GetNormalized()
 					if not ent:WeaponsInRange() then
-						Dir = swap and MuzzleL.Ang:Up() or MuzzleR.Ang:Up()
+						Dir = swap and MuzzleL.Ang:Forward() or MuzzleR.Ang:Forward()
 					end
 
 					local projectile = ents.Create( "lvs_missile" )
@@ -308,7 +308,7 @@ function ENT:InitTurret()
 
 		local bullet = {}
 		bullet.Src 	= Muzzle.Pos
-		bullet.Dir 	= Muzzle.Ang:Up()
+		bullet.Dir 	= Muzzle.Ang:Forward()
 		bullet.Spread 	= Vector(0,0,0)
 		bullet.TracerName = "lvs_laser_red_aat"
 		bullet.Force	= 16000
@@ -328,7 +328,7 @@ function ENT:InitTurret()
 		local effectdata = EffectData()
 		effectdata:SetStart( Vector(255,50,50) )
 		effectdata:SetOrigin( bullet.Src )
-		effectdata:SetNormal( Muzzle.Ang:Up() )
+		effectdata:SetNormal( Muzzle.Ang:Forward() )
 		effectdata:SetEntity( ent )
 		util.Effect( "lvs_muzzle_colorable", effectdata )
 
@@ -338,12 +338,58 @@ function ENT:InitTurret()
 
 		local PhysObj = base:GetPhysicsObject()
 		if IsValid( PhysObj ) then
-			PhysObj:ApplyForceOffset( -Muzzle.Ang:Up() * 25000, Muzzle.Pos )
+			PhysObj:ApplyForceOffset( -Muzzle.Ang:Forward() * 25000, Muzzle.Pos )
 		end
 
 		if not IsValid( base.SNDTurret ) then return end
 
 		base.SNDTurret:PlayOnce( 100 + math.cos( CurTime() + ent:EntIndex() * 1337 ) * 5 + math.Rand(-1,1), 1 )
+	end
+	weapon.HudPaint = function( ent, X, Y, ply )
+		local base = ent:GetVehicle()
+
+		if not IsValid( base ) then return end
+
+		local ID = base:LookupAttachment( "muzzle" )
+
+		local Muzzle = base:GetAttachment( ID )
+
+		if Muzzle then
+			local traceTurret = util.TraceLine( {
+				start = Muzzle.Pos,
+				endpos = Muzzle.Pos + Muzzle.Ang:Forward() * 50000,
+				filter = base:GetCrosshairFilterEnts()
+			} )
+
+			local MuzzlePos2D = traceTurret.HitPos:ToScreen() 
+
+			ent:PaintCrosshairSquare( MuzzlePos2D, COLOR_WHITE )
+			ent:LVSPaintHitMarker( MuzzlePos2D )
+		end
+	end
+	self:AddWeapon( weapon, 2 )
+
+	local weapon = {}
+	weapon.Icon = Material("lvs/weapons/tank_noturret.png")
+	weapon.Ammo = -1
+	weapon.Delay = 0
+	weapon.HeatRateUp = 0
+	weapon.HeatRateDown = 0
+	weapon.OnSelect = function( ent )
+		local base = ent:GetVehicle()
+		if not IsValid( base ) then return end
+
+		if base.SetTurretEnabled then
+			base:SetTurretEnabled( false )
+		end
+	end
+	weapon.OnDeselect = function( ent )
+		local base = ent:GetVehicle()
+		if not IsValid( base ) then return end
+
+		if base.SetTurretEnabled then
+			base:SetTurretEnabled( true )
+		end
 	end
 	self:AddWeapon( weapon, 2 )
 end

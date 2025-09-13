@@ -1,5 +1,7 @@
 include("shared.lua")
 include( "sh_turret.lua" )
+include("cl_optics.lua")
+include("cl_tankview.lua")
 
 function ENT:OnSpawn()
 	local mins, maxs = self:GetRenderBounds()

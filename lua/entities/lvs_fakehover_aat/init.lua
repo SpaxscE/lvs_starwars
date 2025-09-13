@@ -1,6 +1,8 @@
 AddCSLuaFile( "shared.lua" )
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "sh_turret.lua" )
+AddCSLuaFile( "cl_optics.lua" )
+AddCSLuaFile( "cl_tankview.lua" )
 include("shared.lua")
 include( "sh_turret.lua" )
 
@@ -17,6 +19,11 @@ function ENT:OnSpawn( PObj )
 	GunnerSeat.HidePlayer = true
 	GunnerSeat:SetCameraDistance( -0.5 )
 	self:SetGunnerSeat( GunnerSeat )
+
+	local GunnerWeapon = GunnerSeat:lvsGetWeapon()
+	if IsValid( GunnerWeapon ) then
+		GunnerWeapon:UnlockAimVector() 
+	end
 
 	local WheelMass = 25
 	local WheelRadius = 15

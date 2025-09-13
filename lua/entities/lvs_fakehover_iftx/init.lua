@@ -71,6 +71,8 @@ function ENT:OnSpawn( PObj )
 	self:AddArmor( Vector(-60,0,35), Angle(0,0,0), Vector(-40,-40,-30), Vector(0,40,30), 10, 500 )
 	self:AddArmor( Vector(0,60,10), Angle(0,0,-15), Vector(-120,-25,-10), Vector(130,25,10), 50, 1000 )
 	self:AddArmor( Vector(0,-60,10), Angle(0,0,15), Vector(-120,-25,-10), Vector(130,25,10), 50, 1000 )
+
+	self:AddTrailerHitch( Vector(-95,0,15), LVS.HITCHTYPE_MALE )
 end
 
 function ENT:AnimHatch()

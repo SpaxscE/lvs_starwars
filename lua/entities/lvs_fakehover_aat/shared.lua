@@ -312,11 +312,11 @@ function ENT:InitTurret()
 		bullet.Spread 	= Vector(0,0,0)
 		bullet.TracerName = "lvs_laser_red_aat"
 		bullet.Force	= 16000
-		bullet.HullSize 	= 30
+		bullet.HullSize 	= 0
 		bullet.Damage	= 500
 		bullet.SplashDamage = 250
 		bullet.SplashDamageRadius = 250
-		bullet.Velocity = 6000
+		bullet.Velocity = 12000
 		bullet.Attacker 	= ent:GetDriver()
 		bullet.Callback = function(att, tr, dmginfo)
 			local effectdata = EffectData()

@@ -66,11 +66,11 @@ function ENT:OnSpawn( PObj )
 	self.SNDRight:SetSoundLevel( 110 )
 	self.SNDRight:SetParent( self, ID )
 
-	self:AddArmor( Vector(30,0,25), Angle(20,0,0), Vector(-45,-40,-20), Vector(40,40,10), 750, 4000 )
-	self:AddArmor( Vector(-60,0,35), Angle(0,0,0), Vector(0,-40,-30), Vector(50,40,30), 250, 2500 )
+	self:AddArmor( Vector(30,0,25), Angle(20,0,0), Vector(-45,-40,-20), Vector(40,40,10), 750, 500 )
+	self:AddArmor( Vector(-60,0,35), Angle(0,0,0), Vector(0,-40,-30), Vector(50,40,30), 250, 500 )
 	self:AddArmor( Vector(-60,0,35), Angle(0,0,0), Vector(-40,-40,-30), Vector(0,40,30), 10, 500 )
-	self:AddArmor( Vector(0,60,10), Angle(0,0,-15), Vector(-120,-25,-10), Vector(130,25,10), 50, 1000 )
-	self:AddArmor( Vector(0,-60,10), Angle(0,0,15), Vector(-120,-25,-10), Vector(130,25,10), 50, 1000 )
+	self:AddArmor( Vector(0,60,10), Angle(0,0,-15), Vector(-120,-25,-10), Vector(130,25,10), 50, 500 )
+	self:AddArmor( Vector(0,-60,10), Angle(0,0,15), Vector(-120,-25,-10), Vector(130,25,10), 50, 500 )
 
 	self:AddTrailerHitch( Vector(-95,0,15), LVS.HITCHTYPE_MALE )
 end

@@ -16,32 +16,28 @@ ENT.OpticsCrosshairSize = 4
 local circle = Material( "lvs/circle_hollow.png" )
 local tri1 = Material( "lvs/triangle1.png" )
 local tri2 = Material( "lvs/triangle2.png" )
-local scope = Material( "lvs/scope_viewblocked.png" )
+local scope = Material( "lvs/scope_aat.png" )
+local reticle = Material( "lvs/reticle_aat.png" )
 
 function ENT:PaintOpticsCrosshair( Pos2D )
-	surface.SetDrawColor( 255, 255, 255, 5 )
-	surface.SetMaterial( tri1 )
-	surface.DrawTexturedRect( Pos2D.x - 17, Pos2D.y - 1, 32, 32 )
-	surface.SetDrawColor( 0, 0, 0, 255 )
-	surface.DrawTexturedRect( Pos2D.x - 16, Pos2D.y, 32, 32 )
-
-	for i = -3, 3, 1 do
-		if i == 0 then continue end
-
-		surface.SetMaterial( tri2 )
-		surface.SetDrawColor( 255, 255, 255, 5 )
-		surface.DrawTexturedRect( Pos2D.x - 11 + i * 32, Pos2D.y - 1, 20, 20 )
-		surface.SetDrawColor( 0, 0, 0, 255 )
-		surface.DrawTexturedRect( Pos2D.x - 10 + i * 32, Pos2D.y, 20, 20 )
-	end
-
+	local Res = 512
+	local ScrW = ScrW()
 	local ScrH = ScrH()
 
-	local Y = Pos2D.y + 64
-	local height = ScrH - Y
+	surface.SetDrawColor( 255, 255, 255, 255 )
+	surface.SetMaterial( reticle )
+	surface.DrawTexturedRect( Pos2D.x - Res * 0.5, Pos2D.y - Res * 0.5, Res, Res )
 
-	surface.SetDrawColor( 0, 0, 0, 100 )
-	surface.DrawRect( Pos2D.x - 2,  Y, 4, height )
+	surface.SetDrawColor( 51, 218, 232, 100 )
+	surface.DrawRect( Pos2D.x - 1, Pos2D.y + Res * 0.5, 2, ScrH )
+	surface.DrawRect( Pos2D.x - 1, Pos2D.y - Res * 0.5 - ScrH, 2, ScrH )
+
+	surface.DrawRect( Pos2D.x + Res * 0.5, Pos2D.y - 2, ScrW, 4 )
+	surface.DrawRect( Pos2D.x - Res * 0.5 - ScrW, Pos2D.y - 2, ScrW, 4 )
+
+	surface.SetMaterial( circle )
+	surface.SetDrawColor( 51, 218, 232, 255 )
+	surface.DrawTexturedRect( Pos2D.x - 8, Pos2D.y - 8, 16, 16 )
 end
 
 function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
@@ -54,16 +50,15 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 	local ScrW = ScrW()
 	local ScrH = ScrH()
 
-	surface.SetDrawColor( 0, 0, 0, 200 )
-
 	local diameter = ScrH + 64
 	local radius = diameter * 0.5
 
 	surface.SetMaterial( scope )
-	surface.SetDrawColor( 0, 0, 0, 255 )
+	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.DrawTexturedRect( Pos2D.x - radius, Pos2D.y - radius, diameter, diameter )
 
 	-- black bar left + right
+	surface.SetDrawColor( 0, 0, 0, 255 )
 	surface.DrawRect( 0, 0, Pos2D.x - radius, ScrH )
 	surface.DrawRect( Pos2D.x + radius, 0, Pos2D.x - radius, ScrH )
 end

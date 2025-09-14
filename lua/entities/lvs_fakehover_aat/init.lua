@@ -63,7 +63,7 @@ function ENT:OnSpawn( PObj )
 	self.SNDTurret:SetParent( self, ID )
 
 	-- turret
-	local TurretArmor = self:AddArmor( Vector(-70,0,100), Angle(0,0,0), Vector(-35,-30,-15),Vector(40,30,15), 500, 500 )
+	local TurretArmor = self:AddArmor( Vector(-70,0,100), Angle(0,0,0), Vector(-35,-30,-15),Vector(40,30,15), 2500, 500 )
 	TurretArmor:SetLabel( "Turret" )
 	self:SetTurretArmor( TurretArmor )
 

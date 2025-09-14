@@ -18,6 +18,7 @@ local tri1 = Material( "lvs/triangle1.png" )
 local tri2 = Material( "lvs/triangle2.png" )
 local scope = Material( "lvs/scope_aat.png" )
 local reticle = Material( "lvs/reticle_aat.png" )
+local reticleheat = Material( "lvs/reticle_heat_aat.png" )
 
 function ENT:PaintOpticsCrosshair( Pos2D )
 	local Res = 512
@@ -27,6 +28,33 @@ function ENT:PaintOpticsCrosshair( Pos2D )
 	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.SetMaterial( reticle )
 	surface.DrawTexturedRect( Pos2D.x - Res * 0.5, Pos2D.y - Res * 0.5, Res, Res )
+
+	local Res05 = Res * 0.5
+
+	local pod = self:GetGunnerSeat()
+
+	if IsValid( pod ) then
+		local weapon = pod:lvsGetWeapon()
+		if IsValid( weapon ) then
+			local heat = weapon:GetNWHeat()
+			local invheat = 1 - heat
+			local min = 0.38
+			local max = 0.65
+			local Mul = min * heat + max * invheat
+
+			surface.SetMaterial( reticleheat )
+			surface.SetDrawColor( 80 + 80 * heat, 0, 0, 255 )
+
+			if weapon:GetNWOverheated() then
+				surface.SetDrawColor( 255, 0, 0, 100 + 155 * math.abs( math.cos( CurTime() * 7 ) ) )
+				Mul = min
+			end
+
+			render.SetScissorRect( Pos2D.x - Res05, Pos2D.y - Res05 + Res * Mul, Pos2D.x + Res05, Pos2D.y + Res05 , true )
+				surface.DrawTexturedRect( Pos2D.x - Res05, Pos2D.y - Res05, Res, Res )
+			render.SetScissorRect( 0, 0, 0, 0, false )
+		end
+	end
 
 	surface.SetDrawColor( 51, 218, 232, 100 )
 	surface.DrawRect( Pos2D.x - 1, Pos2D.y + Res * 0.5, 2, ScrH )

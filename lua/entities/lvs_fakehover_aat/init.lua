@@ -13,7 +13,7 @@ function ENT:OnSpawn( PObj )
 
 	local DriverSeat = self:AddDriverSeat( Vector(20,0,80), Angle(0,-90,0) )
 	DriverSeat.HidePlayer = true
-	DriverSeat:SetCameraDistance( -0.5 )
+	DriverSeat:SetCameraDistance( -0.25 )
 
 	local GunnerSeat = self:AddPassengerSeat( Vector(-75,0,95), Angle(0,-90,0) )
 	GunnerSeat.HidePlayer = true

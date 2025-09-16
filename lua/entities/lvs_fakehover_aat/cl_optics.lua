@@ -17,6 +17,7 @@ local circle = Material( "lvs/circle_hollow.png" )
 local tri1 = Material( "lvs/triangle1.png" )
 local tri2 = Material( "lvs/triangle2.png" )
 local scope = Material( "lvs/scope_aat.png" )
+local scopeheat = Material( "lvs/scope_aat_heatwarning.png" )
 local reticle = Material( "lvs/reticle_aat.png" )
 local reticleheat = Material( "lvs/reticle_heat_aat.png" )
 
@@ -32,7 +33,6 @@ function ENT:PaintOpticsCrosshair( Pos2D )
 	local Res05 = Res * 0.5
 
 	local pod = self:GetGunnerSeat()
-
 	if IsValid( pod ) then
 		local weapon = pod:lvsGetWeapon()
 		if IsValid( weapon ) then
@@ -42,13 +42,14 @@ function ENT:PaintOpticsCrosshair( Pos2D )
 			local max = 0.65
 			local Mul = min * heat + max * invheat
 
+			local invheatexp = invheat
+			local heatexp = heat ^ 2
+			local R = 51 * invheatexp + 255 * heatexp
+			local G = 218 * invheatexp
+			local B = 232 * invheatexp
+	
 			surface.SetMaterial( reticleheat )
-			surface.SetDrawColor( 80 + 80 * heat, 0, 0, 255 )
-
-			if weapon:GetNWOverheated() then
-				surface.SetDrawColor( 255, 0, 0, 100 + 155 * math.abs( math.cos( CurTime() * 7 ) ) )
-				Mul = min
-			end
+			surface.SetDrawColor( R, G, B, 255 )
 
 			render.SetScissorRect( Pos2D.x - Res05, Pos2D.y - Res05 + Res * Mul, Pos2D.x + Res05, Pos2D.y + Res05 , true )
 				surface.DrawTexturedRect( Pos2D.x - Res05, Pos2D.y - Res05, Res, Res )
@@ -84,6 +85,16 @@ function ENT:PaintOptics( Pos2D, Col, PodIndex, Type )
 	surface.SetMaterial( scope )
 	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.DrawTexturedRect( Pos2D.x - radius, Pos2D.y - radius, diameter, diameter )
+
+	local pod = self:GetGunnerSeat()
+	if IsValid( pod ) then
+		local weapon = pod:lvsGetWeapon()
+		if IsValid( weapon ) and weapon:GetNWOverheated() then
+			surface.SetMaterial( scopeheat )
+			surface.SetDrawColor( 255, 0, 0, 255 * math.abs( math.cos( CurTime() * 7 ) ) )
+			surface.DrawTexturedRect( Pos2D.x - radius, Pos2D.y - radius, diameter, diameter )
+		end
+	end
 
 	-- black bar left + right
 	surface.SetDrawColor( 0, 0, 0, 255 )

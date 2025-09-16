@@ -378,8 +378,6 @@ function ENT:InitTurret()
 		if base:GetIsCarried() then
 			if base:GetTurretEnabled() then
 				base:SetTurretEnabled( false )
-				base:SetTurretPitch( base.TurretPitchOffset )
-				base:SetTurretYaw( base.TurretYawOffset )
 			end
 
 			return
@@ -402,8 +400,8 @@ function ENT:InitTurret()
 
 		if not IsValid( base ) then return end
 
-		if base.SetTurretEnabled then
-			base:SetTurretEnabled( false )
+		if base.SetTurretForceCenter then
+			base:SetTurretForceCenter( true )
 		end
 	end
 	weapon.OnDeselect = function( ent )
@@ -411,8 +409,8 @@ function ENT:InitTurret()
 
 		if not IsValid( base ) then return end
 
-		if base.SetTurretEnabled then
-			base:SetTurretEnabled( true )
+		if base.SetTurretForceCenter then
+			base:SetTurretForceCenter( false )
 		end
 	end
 	self:AddWeapon( weapon, 2 )

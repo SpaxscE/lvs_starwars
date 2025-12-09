@@ -133,10 +133,10 @@ ENT.IconEngine = Material( "lvs/engine.png" )
 
 function ENT:LVSHudPaintInfoText( X, Y, W, H, ScrX, ScrY, ply )
 	local Vel = self:GetVelocity():Length()
-	local kmh = math.Round(Vel * 0.09144,0)
 
-	draw.DrawText( "km/h ", "LVS_FONT", X + 72, Y + 35, color_white, TEXT_ALIGN_RIGHT )
-	draw.DrawText( kmh, "LVS_FONT_HUD_LARGE", X + 72, Y + 20, color_white, TEXT_ALIGN_LEFT )
+	local speed = math.Round( LVS:GetUnitValue( Vel ) ,0)
+	draw.DrawText( LVS:GetUnitName().." ", "LVS_FONT", X + 72, Y + 35, color_white, TEXT_ALIGN_RIGHT )
+	draw.DrawText( speed, "LVS_FONT_HUD_LARGE", X + 72, Y + 20, color_white, TEXT_ALIGN_LEFT )
 
 	if ply ~= self:GetDriver() then return end
 

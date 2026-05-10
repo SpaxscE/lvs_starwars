@@ -31,7 +31,7 @@ function ENT:OnSpawn( PObj )
 	self.WingRightSND = self:AddSoundEmitter( Vector(-206,-341,109), "lvs/vehicles/laat/ballturret_loop.wav", "lvs/vehicles/laat/ballturret_loop.wav" )
 	self.WingRightSND:SetSoundLevel( 110 )
 
-	self.WingLeftSND = self:AddSoundEmitter( Vector(-206,-341,109), "lvs/vehicles/laat/ballturret_loop.wav", "lvs/vehicles/laat/ballturret_loop.wav" )
+	self.WingLeftSND = self:AddSoundEmitter( Vector(-206,341,109), "lvs/vehicles/laat/ballturret_loop.wav", "lvs/vehicles/laat/ballturret_loop.wav" )
 	self.WingLeftSND:SetSoundLevel( 110 )
 
 	self.SNDTail = self:AddSoundEmitter( Vector(-440,0,157), "lvs/vehicles/arc170/fire_gunner.mp3", "lvs/vehicles/arc170/fire_gunner.mp3" )
